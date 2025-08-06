@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://gcssoeq2uvof"]
+
+[ext_resource type="PackedScene" uid="uid://d01wtpgiwk5qj" path="res://ui/menus/import_menu.tscn" id="1_rlwcf"]
+
+[node name="TestImport" type="Node"]
+
+[node name="ImportMenu" parent="." instance=ExtResource("1_rlwcf")]

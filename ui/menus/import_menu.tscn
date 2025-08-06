@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://d01wtpgiwk5qj"]
+
+[ext_resource type="Script" uid="uid://dg0r2onne5hy2" path="res://ui/menus/import_menu.gd" id="1_w8tkn"]
+
+[node name="ImportMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_w8tkn")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -653.5
+offset_top = -362.5
+offset_right = 653.5
+offset_bottom = 362.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnAdd" type="Button" parent="Panel/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "ADD"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Import"
+initial_position = 2
+size = Vector2i(1000, 600)
+ok_button_text = "Import"
+file_mode = 0
+
+[connection signal="pressed" from="Panel/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/BtnAdd" to="." method="_on_btn_add_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
