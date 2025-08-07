@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cglbigfxn3ytu"]
+
+[ext_resource type="Script" uid="uid://ybsdhgj2j0qs" path="res://stage/script_interpreter.gd" id="1_bgtp2"]
+
+[node name="ScriptInterpreter" type="Node"]
+script = ExtResource("1_bgtp2")

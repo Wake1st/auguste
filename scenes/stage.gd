@@ -13,3 +13,22 @@ enum Location {
 	DOWN_CENTER,
 	DOWN_RIGHT
 }
+
+enum Direction {
+	BELOW,
+	ABOVE,
+	RIGHT,
+	LEFT,
+}
+
+enum Light {
+	SPOT,
+	FRESNEL,
+}
+
+enum Animations {
+	BOUNCE,
+	WOBBLE,
+	ROCK,
+	SPIN,
+}

@@ -1,4 +1,4 @@
-class_name Character
+class_name Actor
 extends Sprite2D
 
 

@@ -10,31 +10,31 @@ signal finished()
 		layer = value
 		_update_layer(value)
 
-@onready var character_node: Node2D = $CharacterNode
+@onready var actor_node: Node2D = $ActorNode
 
-var characters: Array[Character]
+var actors: Array[Actor]
 
 
-func pass_character(character: Character, duration: float = 1.0) -> void:
-	characters.push_back(character)
+func pass_actor(actor: Actor, duration: float = 1.0) -> void:
+	actors.push_back(actor)
 	
 	# reparent
-	var glob_pos = character.global_position
-	character.reparent(character_node)
-	character.global_position = glob_pos
+	var glob_pos = actor.global_position
+	actor.reparent(actor_node)
+	actor.global_position = glob_pos
 	
 	# move to location
 	var tween = create_tween()
-	tween.tween_property(character, "global_position", global_position, duration)
+	tween.tween_property(actor, "global_position", global_position, duration)
 	tween.tween_callback(_relocation_finished)
 
 
-func take_character(nickname: String) -> Character:
-	for character: Character in character_node.get_children():
-		if character.name == nickname:
-			var index = characters.find(character)
-			characters.remove_at(index)
-			return character
+func take_actor(nickname: String) -> Actor:
+	for actor: Actor in actor_node.get_children():
+		if actor.name == nickname:
+			var index = actors.find(actor)
+			actors.remove_at(index)
+			return actor
 	return null
 
 

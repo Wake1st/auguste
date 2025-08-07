@@ -17,11 +17,11 @@ A Puppet Show Maker.
 	- [ ] exporting
 	- [ ] scripting
 		- [ ] breakpoints
-		- [ ] step through
+		- [ ] step through72
 - [ ] stage
 	- [ ] locations
 		- [x] lighting
-		- [x] passing character
+		- [x] passing actor
 		- [ ] sub-locations
 	- [ ] debug/follow the script
 - [ ] export
@@ -30,51 +30,53 @@ A Puppet Show Maker.
 
 ## Keywords
 
-- `scene "name"`
+- `scene 'name'`
 	- description: defines a scene, displaying a title card
-	- required: the `"name"` of a scene
+	- required: the `'name'` of a scene
 - `wait *duration*`
 	- description: delays the scene
 	- required: the `duration` of the delay
-- `sound "sound name" [-s || [-b *start time*] [-t *duration*] [-l [*count*]]]`
+- `sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-l [*count*]]]`
 	- description: plays a sound
-	- optional: will stop a currenty playing sound with `-s`
+	- optional: will stop a currenty playing sound with `-o`
 	- optional: start at a specific `start time` (default := 0.0)
 	- optional: last for a speficic `duration` (default := plays the whole file)
 	- optional: loop (default := indefinite)
-- `light *type [*location*]* *rgba(red,green,blue,alpha)*`
+- `light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]`
 	- description: illuminates the stage
 	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
 	- required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`
-- `character "name"`
-	- description: defines a character
-	- required: a `"name"` which will be used to identity the character
-- `character: [*action*] ["dialogue"]`
-	- description: commands a character to do and/or say something
+	- optional: a delay of `*delay*` seconds, including decimals
+- `actor 'name' 'texture'`
+	- description: defines a actor
+	- required: a `'name'` which will be used to identity the actor
+	- required: a texture to visually represent the actor
+- `actor: [*action*] ["dialogue"]`
+	- description: commands a actor to do and/or say something
 	- required: at least one `action` or `"dialogue"` is required, both can be optional
-	- optional: an `action` for the character to perform
-	- optional: `"dialogue"` for the character to "say" (the dialogue will be displayed as subtitles at the bottom of the stage)
+	- optional: an `action` for the actor to perform
+	- optional: `"dialogue"` for the actor to "say" (the dialogue will be displayed as subtitles at the bottom of the stage)
 	- `enter *location* [-d *from*] [-t *duration*]`
-		- description: introduces a character onto the stage
-		- required: `location` on stage to put the character
-		- optional: `from`, the direction from where the character appears (`below`, `above`, `right`, `left`) (default is `below`)
+		- description: introduces a actor onto the stage
+		- required: `location` on stage to put the actor
+		- optional: `from`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
 		- optional: the `duration` which the entrance lasts (default is one second)
 	- `exit *location* [-d *to*] [-t *duration*]`
-		- description: introduces a character onto the stage
-		- required: `location` on stage to put the character
-		- optional: `to`, the direction to where the character disappears (`below`, `above`, `right`, `left`) (default is `below`)
+		- description: introduces a actor onto the stage
+		- required: `location` on stage to put the actor
+		- optional: `to`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
 		- optional: the `duration` which the exit lasts (default is one second)
 	- `move *location* [-s *sub-location*]`
 		- required: `location`, a specific place on screen
 		- optional: `sub-location`, relative to anything already there
-	- `animate "animation name" [-t *duration* || -c *cycle count*]`:
-		- description: animates the character
-		- required: `"animation name"` to specify the type of animation to play
+	- `animate 'animation name' [-t *duration* || -c *cycle count*]`:
+		- description: animates the actor
+		- required: `'animation name'` to specify the type of animation to play
 		- optional: a specific time or cycle count (default is one second)
 
 ### Actions
 
-Actions can be chained together with the ` | ` character to allow multiple animations to occur in parallel. 
+Actions can be chained together with the ` | ` actor to allow multiple animations to occur in parallel. 
 
 EXAMPLES:
 ```
@@ -90,9 +92,9 @@ For this script, the stage locations are divided into a 3x3 grid.
 - down / center / up: closer to the audience, center of the stage, and furthest from the audience
 - left / center / right: the left, center, and right side of the stage according to the audience
 
-There is also the option to provide a sub-location with the `-s` parameter; this will move the character relative to any other characters in a scene. So if a character is meant to be `down-center up-center` they will go to the `up-center` part of the `down-center` location. 
+There is also the option to provide a sub-location with the `-s` parameter; this will move the actor relative to any other actors in a scene. So if a actor is meant to be `down-center up-center` they will go to the `up-center` part of the `down-center` location. 
 
-If a character(s) are already present in the same `location` and `sub-location`, then the newest character will be placed in the front.
+If a actor(s) are already present in the same `location` and `sub-location`, then the newest actor will be placed in the front.
 
 EXAMPLES: 
 ```
@@ -114,3 +116,12 @@ alice: animate "bounce"
 bob: animate "bounce" -t 2.3
 celeste: animate "bounce" -c 3
 ```
+
+
+## Blog
+
+### 8/6/2025
+
+After some initial setup of importing assets and a basic stage, I have begun work on the \
+script interpreter. I'm thinking of turning these strings into `Commands`, \
+wherein each command can be utilized via data instead of constant string checking.
