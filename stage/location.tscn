@@ -14,7 +14,8 @@ range_z_max = 3
 texture = ExtResource("1_80yxl")
 texture_scale = 0.8
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_80yxl")
+[node name="ActorNode" type="Node2D" parent="."]
 
-[node name="CharacterNode" type="Node2D" parent="."]
+[node name="LightTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="LightTimer" to="." method="_on_light_timer_timeout"]

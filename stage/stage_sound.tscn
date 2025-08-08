@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk44c4f80l1p5"]
+
+[ext_resource type="Script" uid="uid://c2mbgv4attt5x" path="res://stage/stage_sound.gd" id="1_mer6q"]
+
+[node name="StageSound" type="AudioStreamPlayer"]
+script = ExtResource("1_mer6q")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="finished" from="." to="." method="_on_finished"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

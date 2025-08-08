@@ -3,15 +3,15 @@ extends Command
 
 
 var name: String
-var delay: String
+var delay: float
 var start: float
 var duration: float
-var count: float
+var cycle: float
 var shouldStop: bool
 
 
 func _init(
-	num: int, _name: String, _delay: float = 0.0, _start: float = 0.0, _duration: float = -1.0, _count: float = 1.0, _shouldStop: bool = false
+	num: int, _name: String, _delay: float = 0.0, _start: float = 0.0, _duration: float = -1.0, _cycle: float = 1.0, _shouldStop: bool = false
 ) -> void:
 	super._init(num)
 	
@@ -19,5 +19,5 @@ func _init(
 	delay = _delay
 	start = _start
 	duration = _duration
-	count = _count
+	cycle = _cycle
 	shouldStop = _shouldStop
