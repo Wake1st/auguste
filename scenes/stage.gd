@@ -89,6 +89,7 @@ func _next_command() -> void:
 	elif command is ActorEnterCommand:
 		var actor_command = command as ActorEnterCommand
 		var actor: Actor = actors[actor_command.id]
+		location_manager.enter_actor(actor, actor_command)
 		
 		if command.has_dialog():
 			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
@@ -96,6 +97,7 @@ func _next_command() -> void:
 	elif command is ActorExitCommand:
 		var actor_command = command as ActorExitCommand
 		var actor: Actor = actors[actor_command.id]
+		location_manager.exit_actor(actor, actor_command)
 		
 		if command.has_dialog():
 			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
@@ -103,6 +105,7 @@ func _next_command() -> void:
 	elif command is ActorMoveCommand:
 		var actor_command = command as ActorMoveCommand
 		var actor: Actor = actors[actor_command.id]
+		location_manager.send_actor(actor, actor_command)
 		
 		if command.has_dialog():
 			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)

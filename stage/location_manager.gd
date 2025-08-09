@@ -2,6 +2,11 @@ class_name LocationManager
 extends Node2D
 
 
+@export var above_stage: Marker2D
+@export var below_stage: Marker2D
+@export var left_stage: Marker2D
+@export var right_stage: Marker2D
+
 @onready var location_up_left: Location = $LocationUpLeft
 @onready var location_up: Location = $LocationUp
 @onready var location_up_right: Location = $LocationUpRight
@@ -26,22 +31,75 @@ func setup(callable: Callable) -> void:
 
 
 func light_command(command: LightCommand) -> void:
-	match command.location:
+	var location: Location = get_location(command.location)
+	location.toggle_light(command)
+
+
+func send_actor(actor: Actor, command: ActorMoveCommand) -> void:
+	var location: Location = get_location(command.location)
+	location.send_actor(actor, command.duration)
+
+
+func enter_actor(actor: Actor, command: ActorEnterCommand) -> void:
+	# get the target location
+	var location: Location = get_location(command.location)
+	
+	# get the off stage position
+	var out_position: Vector2
+	match command.direction:
+		Stage.Direction.BELOW:
+			out_position += Vector2(location.x, below_stage.y)
+		Stage.Direction.ABOVE:
+			out_position += Vector2(location.x, above_stage.y)
+		Stage.Direction.LEFT:
+			out_position += Vector2(left_stage.x, location.y)
+		Stage.Direction.RIGHT:
+			out_position += Vector2(right_stage.x, location.y)
+	
+	# move the actor from off stage to the location
+	location.enter_actor(actor, command.duration, out_position)
+
+
+
+func exit_actor(actor: Actor, command: ActorExitCommand) -> void:
+	# get the target location
+	var location: Location = get_location(command.location)
+	
+	# get the off stage position
+	var out_position: Vector2
+	match command.direction:
+		Stage.Direction.BELOW:
+			out_position += Vector2(location.x, below_stage.y)
+		Stage.Direction.ABOVE:
+			out_position += Vector2(location.x, above_stage.y)
+		Stage.Direction.LEFT:
+			out_position += Vector2(left_stage.x, location.y)
+		Stage.Direction.RIGHT:
+			out_position += Vector2(right_stage.x, location.y)
+	
+	# move the actor from off stage to the location
+	location.exit_actor(actor, command.duration, out_position)
+
+
+func get_location(location: Stage.Location) -> Location:
+	match location:
 		Stage.Location.UP_LEFT: 
-			location_up_left.toggle_light(command)
+			return location_up_left
 		Stage.Location.UP_CENTER: 
-			location_up.toggle_light(command)
+			return location_up
 		Stage.Location.UP_RIGHT: 
-			location_up_right.toggle_light(command)
+			return location_up_right
 		Stage.Location.LEFT: 
-			location_left.toggle_light(command)
+			return location_left
 		Stage.Location.CENTER: 
-			location_center.toggle_light(command)
+			return location_center
 		Stage.Location.RIGHT: 
-			location_right.toggle_light(command)
+			return location_right
 		Stage.Location.DOWN_LEFT: 
-			location_down_left.toggle_light(command)
+			return location_down_left
 		Stage.Location.DOWN_CENTER: 
-			location_down.toggle_light(command)
+			return location_down
 		Stage.Location.DOWN_RIGHT: 
-			location_down_right.toggle_light(command)
+			return location_down_right
+		_:
+			return null

@@ -22,7 +22,23 @@ position = Vector2(0, -286)
 scale = Vector2(18.3359, 11.8906)
 texture = ExtResource("1_gi7kc")
 
-[node name="LocationManager" parent="." instance=ExtResource("5_vcsse")]
+[node name="LocationManager" parent="." node_paths=PackedStringArray("above_stage", "below_stage", "left_stage", "right_stage") instance=ExtResource("5_vcsse")]
+above_stage = NodePath("AboveStage")
+below_stage = NodePath("BelowStage")
+left_stage = NodePath("LeftStage")
+right_stage = NodePath("RightStage")
+
+[node name="AboveStage" type="Marker2D" parent="LocationManager"]
+position = Vector2(0, -600)
+
+[node name="BelowStage" type="Marker2D" parent="LocationManager"]
+position = Vector2(0, 600)
+
+[node name="LeftStage" type="Marker2D" parent="LocationManager"]
+position = Vector2(-950, 0)
+
+[node name="RightStage" type="Marker2D" parent="LocationManager"]
+position = Vector2(950, 0)
 
 [node name="Actors" type="Node2D" parent="."]
 

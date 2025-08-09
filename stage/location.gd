@@ -17,18 +17,16 @@ signal finished()
 var actors: Array[Actor]
 
 
-func pass_actor(actor: Actor, duration: float = 1.0) -> void:
-	actors.push_back(actor)
-	
-	# reparent
-	var glob_pos = actor.global_position
-	actor.reparent(actor_node)
-	actor.global_position = glob_pos
-	
-	# move to location
-	var tween = create_tween()
-	tween.tween_property(actor, "global_position", global_position, duration)
-	tween.tween_callback(_relocation_finished)
+func send_actor(actor: Actor, duration: float = 1.0) -> void:
+	_move_actor(actor, duration, actor.global_position, global_position)
+
+
+func enter_actor(actor: Actor, duration: float, out_position: Vector2) -> void:
+	_move_actor(actor, duration, out_position, global_position)
+
+
+func exit_actor(actor: Actor, duration: float, out_position: Vector2) -> void:
+	_move_actor(actor, duration, global_position, out_position)
 
 
 func take_actor(nickname: String) -> Actor:
@@ -60,6 +58,17 @@ func _update_layer(value: int) -> void:
 	if has_node("Sprite2D"):
 		var spot: PointLight2D = get_node("Sprite2D")
 		spot.z_index = value
+
+func _move_actor(actor: Actor, duration: float, start: Vector2, target: Vector2) -> void:
+	# reparent
+	actor.reparent(actor_node)
+	actor.global_position = start
+	actors.push_back(actor)
+	
+	# move to location
+	var tween = create_tween()
+	tween.tween_property(actor, "global_position", target, duration)
+	tween.tween_callback(_relocation_finished)
 
 func _turn_on() -> void:
 	spot_light.enabled = true

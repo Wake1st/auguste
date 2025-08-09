@@ -7,72 +7,72 @@ A Puppet Show Maker.
 ### Prototype
 
 - [x] import
-  - [x] textures
-  - [x] audio
-  - [x] scripts
-  - [x] storing files and keeping in RAM
+	- [x] textures
+	- [x] audio
+	- [x] scripts
+	- [x] storing files and keeping in RAM
 - [ ] editor
-  - [x] importing
-  - [ ] exporting
-  - [ ] scripting
-    - [x] commands
-    - [ ] breakpoints
-    - [ ] step through
+	- [x] importing
+	- [ ] exporting
+	- [ ] scripting
+		- [x] commands
+		- [ ] breakpoints
+		- [ ] step through
 - [ ] stage
-  - [ ] locations
-    - [x] lighting
-    - [x] passing actor
-    - [ ] sub-locations
-  - [ ] debug/follow the script
+	- [ ] locations
+		- [x] lighting
+		- [x] passing actor
+		- [ ] sub-locations
+	- [ ] debug/follow the script
 - [ ] export
-  - [ ] scripts
-  - [ ] recording
+	- [ ] scripts
+	- [ ] recording
 
 ## Keywords
 
 - `scene 'name'`
-  - description: defines a scene, displaying a title card
-  - required: the `'name'` of a scene
+	- description: defines a scene, displaying a title card
+	- required: the `'name'` of a scene
 - `wait *duration*`
-  - description: delays the scene
-  - required: the `duration` of the delay
+	- description: delays the scene
+	- required: the `duration` of the delay
 - `sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]]`
-  - description: plays a sound
-  - optional: will stop a currenty playing sound with `-o`
-  - optional: start at a specific `start time` (default := 0.0)
-  - optional: last for a speficic `duration` (default := plays the whole file)
-  - optional: loop (default := indefinite)
+	- description: plays a sound
+	- optional: will stop a currenty playing sound with `-o`
+	- optional: start at a specific `start time` (default := 0.0)
+	- optional: last for a speficic `duration` (default := plays the whole file)
+	- optional: loop (default := indefinite)
 - `light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]`
-  - description: illuminates the stage
-  - required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
-  - required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`
-  - optional: a delay of `*delay*` seconds, including decimals
+	- description: illuminates the stage
+	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
+	- required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`
+	- optional: a delay of `*delay*` seconds, including decimals
 - `actor 'name' 'texture'`
-  - description: defines a actor
-  - required: a `'name'` which will be used to identity the actor
-  - required: a texture to visually represent the actor
+	- description: defines a actor
+	- required: a `'name'` which will be used to identity the actor
+	- required: a texture to visually represent the actor
 - `actor: [*action*] ["dialogue"]`
-  - description: commands a actor to do and/or say something
-  - required: at least one `action` or `"dialogue"` is required, both can be optional
-  - optional: an `action` for the actor to perform
-  - optional: `"dialogue"` for the actor to "say" (the dialogue will be displayed as subtitles at the bottom of the stage)
-  - `enter *location* [-d *from*] [-t *duration*]`
-    - description: introduces a actor onto the stage
-    - required: `location` on stage to put the actor
-    - optional: `from`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
-    - optional: the `duration` which the entrance lasts (default is one second)
-  - `exit *location* [-d *to*] [-t *duration*]`
-    - description: introduces a actor onto the stage
-    - required: `location` on stage to put the actor
-    - optional: `to`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
-    - optional: the `duration` which the exit lasts (default is one second)
-  - `move *location* [-s *sub-location*]`
-    - required: `location`, a specific place on screen
-    - optional: `sub-location`, relative to anything already there
-  - `animate 'animation name' [-t *duration* || -c *cycle count*]`:
-    - description: animates the actor
-    - required: `'animation name'` to specify the type of animation to play
-    - optional: a specific time or cycle count (default is one second)
+	- description: commands a actor to do and/or say something
+	- required: at least one `action` or `"dialogue"` is required, both can be optional
+	- optional: an `action` for the actor to perform
+	- optional: `"dialogue"` for the actor to "say" (the dialogue will be displayed as subtitles at the bottom of the stage)
+	- `enter *location* [-d *from*] [-t *duration*]`
+		- description: introduces a actor onto the stage
+		- required: `location` on stage to put the actor
+		- optional: `from`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
+		- optional: the `duration` which the entrance lasts (default is one second)
+	- `exit *location* [-d *to*] [-t *duration*]`
+		- description: introduces a actor onto the stage
+		- required: `location` on stage to put the actor
+		- optional: `to`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
+		- optional: the `duration` which the exit lasts (default is one second)
+	- `move *location* [-s *sub-location*]`
+		- required: `location`, a specific place on screen
+		- optional: `sub-location`, relative to anything already there
+	- `animate 'animation name' [-t *duration* || -c *cycle count*]`:
+		- description: animates the actor
+		- required: `'animation name'` to specify the type of animation to play
+		- optional: a specific time or cycle count (default is one second)
 
 ### Actions
 
