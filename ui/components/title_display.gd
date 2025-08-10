@@ -17,7 +17,7 @@ func display(text: String) -> void:
 	animation.play("slide")
 
 
-func _on_animation_player_animation_finished(anim_name) -> void:
+func _on_animation_player_animation_finished(_anim_name) -> void:
 	if isOpen:
 		timer.start()
 	else:

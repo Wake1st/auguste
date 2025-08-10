@@ -24,6 +24,13 @@ A Puppet Show Maker.
 		- [x] passing actor
 		- [ ] sub-locations
 	- [ ] debug/follow the script
+- [ ] scripts
+	- [ ] add comments
+	- [ ] sound
+	- [ ] light
+	- [ ] wait
+	- [ ] actor
+	- [ ] scene
 - [ ] export
 	- [ ] scripts
 	- [ ] recording
@@ -36,12 +43,14 @@ A Puppet Show Maker.
 - `wait *duration*`
 	- description: delays the scene
 	- required: the `duration` of the delay
-- `sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]]`
+- `sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]] [-v *volume*] [-p]`
 	- description: plays a sound
 	- optional: will stop a currenty playing sound with `-o`
 	- optional: start at a specific `start time` (default := 0.0)
 	- optional: last for a speficic `duration` (default := plays the whole file)
 	- optional: loop (default := indefinite)
+	- optional: set volume with `-v` (default := 0.0 db)
+	- optional: will skip to the next step when `-p` is written (default := false)
 - `light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]`
 	- description: illuminates the stage
 	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)

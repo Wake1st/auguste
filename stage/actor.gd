@@ -1,8 +1,14 @@
 class_name Actor
-extends Sprite2D
+extends Node2D
 
 
 signal finished()
+
+@export var texture: Texture2D:
+	set(value):
+		texture = value
+		if has_node("Sprite2D"):
+			get_node("Sprite2D").texture = texture
 
 @onready var animation: AnimationPlayer = $AnimationPlayer
 
@@ -21,5 +27,5 @@ func animate(command: ActorAnimateCommand) -> void:
 			animation.play("spin")
 
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	finished.emit()

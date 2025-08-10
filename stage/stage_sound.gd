@@ -2,13 +2,14 @@ class_name StageSound
 extends AudioStreamPlayer
 
 
-signal completed(sound_name: String)
+signal completed()
 
 @onready var timer: Timer = $Timer
 
 var command: SoundCommand
-#var isDelayed: bool
-var counter: int
+var isDurated: bool
+var hasPlaythrough: bool
+var counter: float
 
 
 func run(cmd: SoundCommand) -> void:
@@ -16,13 +17,19 @@ func run(cmd: SoundCommand) -> void:
 	
 	name = command.name
 	stream = Assets.streams[command.name]
+	volume_db = command.volume
 	counter = command.cycle
 	
+	hasPlaythrough = command.playthrough
+	
 	if command.delay > 0.0:
-		#isDelayed = true
 		timer.start(command.delay)
 	else:
 		_play_sound()
+	
+	# run the next command
+	if hasPlaythrough:
+		completed.emit()
 
 
 func _play_sound() -> void:
@@ -31,14 +38,17 @@ func _play_sound() -> void:
 		play(command.start)
 		
 		if command.duration > 0:
+			isDurated = true
 			timer.start(command.duration)
-	else:
-		completed.emit(command.name)
+	elif not hasPlaythrough:
+		# ensure we don't call it twice
+		completed.emit()
 
 
 func _on_timer_timeout() -> void:
-	#if isDelayed:
-		#isDelayed = false
+	if isDurated:
+		isDurated = false
+		stop()
 	_play_sound()
 
 

@@ -7,11 +7,21 @@ var delay: float
 var start: float
 var duration: float
 var cycle: float
+var volume: float
 var shouldStop: bool
+var playthrough: bool
 
 
 func _init(
-	num: int, _name: String, _delay: float = 0.0, _start: float = 0.0, _duration: float = -1.0, _cycle: float = 1.0, _shouldStop: bool = false
+	num: int, 
+	_name: String, 
+	_delay: float = 0.0, 
+	_start: float = 0.0, 
+	_duration: float = -1.0, 
+	_cycle: float = 1.0, 
+	_volume: float = 0.0, 
+	_shouldStop: bool = false,
+	_playthrough: bool = false
 ) -> void:
 	super._init(num)
 	
@@ -20,4 +30,6 @@ func _init(
 	start = _start
 	duration = _duration
 	cycle = _cycle
+	volume = _volume
 	shouldStop = _shouldStop
+	playthrough = _playthrough

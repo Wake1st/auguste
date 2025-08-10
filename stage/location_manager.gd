@@ -45,16 +45,16 @@ func enter_actor(actor: Actor, command: ActorEnterCommand) -> void:
 	var location: Location = get_location(command.location)
 	
 	# get the off stage position
-	var out_position: Vector2
+	var out_position: Vector2 = Vector2.ZERO
 	match command.direction:
 		Stage.Direction.BELOW:
-			out_position += Vector2(location.x, below_stage.y)
+			out_position += Vector2(location.global_position.x, below_stage.global_position.y)
 		Stage.Direction.ABOVE:
-			out_position += Vector2(location.x, above_stage.y)
+			out_position += Vector2(location.global_position.x, above_stage.global_position.y)
 		Stage.Direction.LEFT:
-			out_position += Vector2(left_stage.x, location.y)
+			out_position += Vector2(left_stage.global_position.x, location.global_position.y)
 		Stage.Direction.RIGHT:
-			out_position += Vector2(right_stage.x, location.y)
+			out_position += Vector2(right_stage.global_position.x, location.global_position.y)
 	
 	# move the actor from off stage to the location
 	location.enter_actor(actor, command.duration, out_position)
@@ -66,16 +66,16 @@ func exit_actor(actor: Actor, command: ActorExitCommand) -> void:
 	var location: Location = get_location(command.location)
 	
 	# get the off stage position
-	var out_position: Vector2
+	var out_position: Vector2 = Vector2.ZERO
 	match command.direction:
 		Stage.Direction.BELOW:
-			out_position += Vector2(location.x, below_stage.y)
+			out_position += Vector2(location.global_position.x, below_stage.global_position.y)
 		Stage.Direction.ABOVE:
-			out_position += Vector2(location.x, above_stage.y)
+			out_position += Vector2(location.global_position.x, above_stage.global_position.y)
 		Stage.Direction.LEFT:
-			out_position += Vector2(left_stage.x, location.y)
+			out_position += Vector2(left_stage.global_position.x, location.global_position.y)
 		Stage.Direction.RIGHT:
-			out_position += Vector2(right_stage.x, location.y)
+			out_position += Vector2(right_stage.global_position.x, location.global_position.y)
 	
 	# move the actor from off stage to the location
 	location.exit_actor(actor, command.duration, out_position)

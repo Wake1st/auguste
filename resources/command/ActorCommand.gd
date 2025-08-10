@@ -2,14 +2,14 @@ class_name ActorCommand
 extends Command
 
 
-var id: String
+var name: String
 var dialog: String
 
 
-func _init(num: int, _id: String, _dialog: String = "") -> void:
+func _init(num: int, _name: String, _dialog: String = "") -> void:
 	super._init(num)
 	
-	id = _id
+	name = _name
 	dialog = _dialog
 
 

@@ -1,0 +1,9 @@
+actor 'Alice' 'image-551'
+
+Alice: enter right below -t 3.0 "Taaaaadaaaaaaaa..."
+Alice: move down-left -t 2.0 "Willowing, billowing, the trees do bend."
+Alice: animate 'bounce' -t 0.4 -c 5 'Wiggle'
+Alice: animate 'spin' -t 0.4 -c 5 'Wiggle'
+Alice: animate 'rock' -t 0.4 -c 5 'Wiggle'
+Alice: animate 'wobble' -t 0.4 -c 5 'Wiggle'
+Alice: exit down-center above -t 3.0 "Gooodbyyyyyyyyyyyyyyyyyyyyyyyyeeeeee"

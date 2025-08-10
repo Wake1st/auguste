@@ -7,8 +7,15 @@ var duration: float
 var cycle: float
 
 
-func _init(num: int, _id: String, _animation: String, _duration: float, _cycle: float, _dialog: String = "") -> void:
-	super._init(num, _id, _dialog)
+func _init(
+	num: int, 
+	_name: String, 
+	_animation: String, 
+	_duration: float, 
+	_cycle: float, 
+	_dialog: String = ""
+) -> void:
+	super._init(num, _name, _dialog)
 	
 	match _animation:
 		"bounce":

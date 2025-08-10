@@ -5,10 +5,16 @@ extends Node
 func process(script: ScriptData) -> Array[Command]:
 	var actors: Array[Actor]
 	var commands: Array[Command]
-	var line_number: int
+	var line_number: int = 0
 	
+	var lines = script.lines
 	for line: String in script.lines:
-		var args: Array[String] = line.split(" ")
+		# no blank lines
+		if line.is_empty():
+			continue
+		
+		# separate the parts
+		var args: PackedStringArray = line.split(" ")
 		
 		# check for initialization statements
 		match args[0]:
@@ -22,32 +28,37 @@ func process(script: ScriptData) -> Array[Command]:
 				var nickname = line.split("'")[1]
 				var filename = line.split("'")[3] # skips cause there's a space
 				
+				var texture: Texture2D = Assets.textures[filename]
 				commands.push_back(ActorCreateCommand.new(
-					line_number, nickname, filename
+					line_number, nickname, texture
 				))
 			"wait": # wait *duration*
-				var duration = get_optional_param("-t", args) as float
+				var duration = args[1] as float
 				
 				commands.push_back(WaitCommand.new(
 					line_number, duration
 				))
-			"sound": # sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]]
+			"sound": # sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]] [-v *volume*] [-p]
 				var sound = line.split("'")[1]
-				var delay = get_optional_param("-d", args) as float
-				var off = get_optional_param("-o", args) as bool
-				var start = get_optional_param("-b", args) as float
-				var duration = get_optional_param("-t", args) as float
-				var cycle = get_optional_param("-c", args) as float
+				var delay = get_optional_float("-d", args)
+				var start = get_optional_float("-b", args)
+				var duration = get_optional_float("-t", args)
+				var cycle = get_optional_float("-c", args)
+				var volume = get_optional_float("-v", args)
+				var off = has_optional_bool("-o", args)
+				var playthrough = has_optional_bool("-p", args)
+				
+				cycle = cycle if cycle > 0.0 else 1.0
 				
 				commands.push_back(SoundCommand.new(
-					line_number, sound, delay, start, duration, cycle, off
+					line_number, sound, delay, start, duration, cycle, volume, off, playthrough
 				))
 			"light": # light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]
 				var type = line.split("'")[1]
 				var color = line.split("(")[1].split(")")[0]
-				var delay = get_optional_param("-d", args)
-				var off = get_optional_param("-o", args)
-				var location = get_optional_param("-l", args)
+				var delay = get_optional_float("-d", args)
+				var off = has_optional_bool("-o", args)
+				var location = get_optional_string("-l", args)
 				
 				commands.push_back(LightCommand.new(
 					line_number, type, location, color, delay, off
@@ -56,41 +67,39 @@ func process(script: ScriptData) -> Array[Command]:
 				# check for actor commands
 				if args[0].ends_with(":"):
 					var actor_name = args[0].replace(":","")
-					var actor = get_actor(actors, actor_name)
-					var id = actor.get_instance_id()
 					var dialog = get_dialogue(line)
 					
 					match args[1]:
 						"enter": # actor: enter *location* [-d *from*] [-t *duration*]
 							var location = args[2]
-							var direction = get_optional_param("-d", args) as float
-							var duration = get_optional_param("-t", args) as float
+							var direction = get_optional_string("-d", args)
+							var duration = get_optional_float("-t", args)
 							
 							commands.push_back(ActorEnterCommand.new(
-								line_number, id, location, direction, duration, dialog
+								line_number, actor_name, location, direction, duration, dialog
 							))
 						"exit": # actor: exit *location* [-d *to*] [-t *duration*]
 							var location = args[2]
-							var direction = get_optional_param("-d", args) as float
-							var duration = get_optional_param("-t", args) as float
+							var direction = get_optional_string("-d", args)
+							var duration = get_optional_float("-t", args)
 							
 							commands.push_back(ActorExitCommand.new(
-								line_number, id, location, direction, duration, dialog
+								line_number, actor_name, location, direction, duration, dialog
 							))
 						"move": # actor move *location* [-s *sub-location*]
 							var location = args[2]
-							var duration = get_optional_param("-t", args) as float
+							var duration = get_optional_float("-t", args)
 							
 							commands.push_back(ActorMoveCommand.new(
-								line_number, id, location, duration, dialog
+								line_number, actor_name, location, duration, dialog
 							))
 						"animate": # actor: animate 'animation name' [-t *duration* || -c *cycle count*]
 							var animation = args[2]
-							var duration = get_optional_param("-t", args) as float
-							var cycle = get_optional_param("-c", args) as float
+							var duration = get_optional_float("-t", args)
+							var cycle = get_optional_float("-c", args)
 							
 							commands.push_back(ActorAnimateCommand.new(
-								line_number, id, animation, duration, cycle, dialog
+								line_number, actor_name, animation, duration, cycle, dialog
 							))
 				else:
 					commands.push_back(ErrorCommand.new(
@@ -115,7 +124,7 @@ func get_actor(actors: Array[Actor], actor_name: String) -> Actor:
 
 
 func get_dialogue(line: String) -> String:
-	var parts: Array[String] = line.split("\"")
+	var parts: PackedStringArray = line.split("\"")
 	
 	if parts.size() == 1:
 		return ""
@@ -123,8 +132,29 @@ func get_dialogue(line: String) -> String:
 		return parts[1]
 
 
-func get_optional_param(keyword: String, args: Array[String]) -> String:
+func get_optional_float(keyword: String, args: Array[String]) -> float:
 	for i in args.size():
 		if args[i] == keyword:
-			return args[i + 1]
+			return args[i + 1] as float
+	return 0.0
+
+
+func has_optional_bool(keyword: String, args: Array[String]) -> bool:
+	for i in args.size():
+		if args[i] == keyword:
+			return true
+	return false
+
+
+func get_optional_bool(keyword: String, args: Array[String]) -> bool:
+	for i in args.size():
+		if args[i] == keyword:
+			return args[i + 1] as bool
+	return false
+
+
+func get_optional_string(keyword: String, args: Array[String]) -> String:
+	for i in args.size():
+		if args[i] == keyword:
+			return args[i + 1] as String
 	return ""

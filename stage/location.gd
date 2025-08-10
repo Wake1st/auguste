@@ -49,6 +49,10 @@ func toggle_light(command: LightCommand) -> void:
 		_turn_on()
 
 
+func _ready() -> void:
+	spot_light.enabled = false
+
+
 func _update_layer(value: int) -> void:
 	if has_node("SpotLight"):
 		var spot: PointLight2D = get_node("SpotLight")

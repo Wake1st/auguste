@@ -1,1 +1,4 @@
-sound 'HauntedPhibes' -c 2
+sound 'throat' -d 3.5 -b 0.8 -t 1.1 -c 2 -v -10
+sound 'WhatKindOfWeedWasThat' -p
+wait 4
+sound 'WhatKindOfWeedWasThat' -o

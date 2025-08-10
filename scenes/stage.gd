@@ -36,6 +36,8 @@ enum Animations {
 }
 #endregion
 
+signal finished()
+
 const ACTOR_SCENE = preload("res://stage/actor.tscn")
 
 @onready var interpreter: ScriptInterpreter = $ScriptInterpreter
@@ -48,7 +50,7 @@ const ACTOR_SCENE = preload("res://stage/actor.tscn")
 @onready var actor_node: Node2D = $Actors
 
 var commands: Array[Command]
-var command_index: int
+var command_index: int = -1
 var actors: Dictionary[String, Actor]
 
 
@@ -58,10 +60,15 @@ func run(script: ScriptData) -> void:
 
 
 func _next_command() -> void:
+	# increment and check for end of command
 	command_index += 1
-	var command = commands[command_index]
-	var hasDialog: bool
+	if command_index >= commands.size():
+		finished.emit()
+		return
 	
+	# process the new command
+	var hasDialog: bool
+	var command = commands[command_index]
 	if command is SceneCreateCommand:
 		# display title card
 		title_display.display((command as SceneCreateCommand).name)
@@ -71,12 +78,12 @@ func _next_command() -> void:
 		actor.name = (command as ActorCreateCommand).name
 		actor.texture = (command as ActorCreateCommand).texture
 		actor_node.add_child(actor)
-		actors.set(actor.get_instance_id(), actor)
+		actors.set(actor.name, actor)
 		
 		_on_command_finished()
 	elif command is SoundCommand:
 		# add sound to manager and play
-		sound_manager.play(command as SoundCommand)
+		sound_manager.process(command as SoundCommand)
 	elif command is LightCommand:
 		# set location light
 		location_manager.light_command(command as LightCommand)
@@ -88,7 +95,7 @@ func _next_command() -> void:
 		hasDialog = true
 	elif command is ActorEnterCommand:
 		var actor_command = command as ActorEnterCommand
-		var actor: Actor = actors[actor_command.id]
+		var actor: Actor = actors[actor_command.name]
 		location_manager.enter_actor(actor, actor_command)
 		
 		if command.has_dialog():
@@ -96,7 +103,7 @@ func _next_command() -> void:
 			hasDialog = true
 	elif command is ActorExitCommand:
 		var actor_command = command as ActorExitCommand
-		var actor: Actor = actors[actor_command.id]
+		var actor: Actor = actors[actor_command.name]
 		location_manager.exit_actor(actor, actor_command)
 		
 		if command.has_dialog():
@@ -104,7 +111,7 @@ func _next_command() -> void:
 			hasDialog = true
 	elif command is ActorMoveCommand:
 		var actor_command = command as ActorMoveCommand
-		var actor: Actor = actors[actor_command.id]
+		var actor: Actor = actors[actor_command.name]
 		location_manager.send_actor(actor, actor_command)
 		
 		if command.has_dialog():
@@ -112,7 +119,7 @@ func _next_command() -> void:
 			hasDialog = true
 	elif command is ActorAnimateCommand:
 		var actor_command = command as ActorAnimateCommand
-		var actor: Actor = actors[actor_command.id]
+		var actor: Actor = actors[actor_command.name]
 		
 		if command.has_dialog():
 			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
