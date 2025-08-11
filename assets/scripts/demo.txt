@@ -2,21 +2,21 @@ scene 'Act 1:1'
 
 actor 'Alice' 'image-551'
 
-sound 'HauntedPhibes' -l 2
+sound 'HauntedPhibes' -l 2 -v -20 -p
 wait 2.4
 
-light spot -l right rgba(240, 0, 180, 0.9)
+light 'spot' -l right rgba(0.9, 0, 0.5, 0.9)
 wait 1.2
 
 Alice: enter right below -t 3.0 "Taaaaadaaaaaaaa..."
 
-light spot -l center rgba(10, 200, 180, 0.9) -d 1.4
-light spot -l down-center rgba(10, 200, 180, 0.9) -d 1.4
-light spot -l down-left rgba(240, 220, 0, 0.9) -d 3.2
+light 'spot' -l center rgba(10, 0.8, 0.5, 0.9) -d 1.4
+light 'spot' -l down-center rgba(.05, 0.8, 0.5, 0.9) -d 1.4
+light 'spot' -l down-left rgba(0.9, 0.85, 0, 0.9) -d 3.2
 Alice: move down-left -t 4.0 "Willowing, billowing, the trees do bend."
 
 sound 'HauntedPhibes' -d 0.6
-Alice: animate 'wiggle' -t 0.2 -c 10 'Wiggle'
+Alice: animate 'wobble' -t 0.2 -c 10 'Wobble'
 
 'Alice wiggled'
 

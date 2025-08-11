@@ -55,7 +55,7 @@ func process(script: ScriptData) -> Array[Command]:
 				))
 			"light": # light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]
 				var type = line.split("'")[1]
-				var color = line.split("(")[1].split(")")[0]
+				var color = get_color(line)
 				var delay = get_optional_float("-d", args)
 				var off = has_optional_bool("-o", args)
 				var location = get_optional_string("-l", args)
@@ -94,7 +94,7 @@ func process(script: ScriptData) -> Array[Command]:
 								line_number, actor_name, location, duration, dialog
 							))
 						"animate": # actor: animate 'animation name' [-t *duration* || -c *cycle count*]
-							var animation = args[2]
+							var animation = line.split("'")[1]
 							var duration = get_optional_float("-t", args)
 							var cycle = get_optional_float("-c", args)
 							
@@ -130,6 +130,11 @@ func get_dialogue(line: String) -> String:
 		return ""
 	else:
 		return parts[1]
+
+
+func get_color(line: String) -> Color:
+	var args = line.split("(")[1].split(")")[0].split(",")
+	return Color(args[0] as int, args[1] as int, args[2] as int, args[3] as int)
 
 
 func get_optional_float(keyword: String, args: Array[String]) -> float:

@@ -54,4 +54,5 @@ func _on_animation_player_animation_finished(anim_name) -> void:
 	if anim_name == "slide" && isOpen:
 		_type_text()
 	elif anim_name == "type":
-		finished.emit()
+		pass
+		#finished.emit()

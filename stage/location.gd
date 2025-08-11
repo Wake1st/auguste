@@ -1,6 +1,6 @@
 @tool
 class_name Location
-extends Node2D
+extends Marker2D
 
 
 signal finished()

@@ -77,10 +77,13 @@ func _next_command() -> void:
 		var actor: Actor = ACTOR_SCENE.instantiate()
 		actor.name = (command as ActorCreateCommand).name
 		actor.texture = (command as ActorCreateCommand).texture
+		actor.finished.connect(_on_command_finished)
+		
 		actor_node.add_child(actor)
 		actors.set(actor.name, actor)
 		
 		_on_command_finished()
+		return	# ensure we end function after calling finished
 	elif command is SoundCommand:
 		# add sound to manager and play
 		sound_manager.process(command as SoundCommand)
@@ -120,6 +123,7 @@ func _next_command() -> void:
 	elif command is ActorAnimateCommand:
 		var actor_command = command as ActorAnimateCommand
 		var actor: Actor = actors[actor_command.name]
+		actor.animate(actor_command)
 		
 		if command.has_dialog():
 			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
