@@ -8,7 +8,6 @@ signal completed()
 
 var command: SoundCommand
 var isDurated: bool
-var hasPlaythrough: bool
 var counter: float
 
 
@@ -20,16 +19,13 @@ func run(cmd: SoundCommand) -> void:
 	volume_db = command.volume
 	counter = command.cycle
 	
-	hasPlaythrough = command.playthrough
-	
 	if command.delay > 0.0:
 		timer.start(command.delay)
 	else:
 		_play_sound()
 	
 	# run the next command
-	if hasPlaythrough:
-		completed.emit()
+	completed.emit()
 
 
 func _play_sound() -> void:
@@ -40,7 +36,7 @@ func _play_sound() -> void:
 		if command.duration > 0:
 			isDurated = true
 			timer.start(command.duration)
-	elif not hasPlaythrough:
+	else:
 		# ensure we don't call it twice
 		completed.emit()
 

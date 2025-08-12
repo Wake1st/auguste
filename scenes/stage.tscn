@@ -8,8 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://o8cx3efyethd" path="res://ui/components/dialog_display.tscn" id="6_2so7o"]
 [ext_resource type="PackedScene" uid="uid://bphhw3owpkdnv" path="res://ui/components/title_display.tscn" id="7_st0q7"]
 
-[node name="Stage" type="Node2D"]
+[node name="Stage" type="Node2D" node_paths=PackedStringArray("spawn_point")]
 script = ExtResource("1_kewym")
+spawn_point = NodePath("SpawnPoint")
 
 [node name="ScriptInterpreter" parent="." instance=ExtResource("2_6c5u0")]
 
@@ -22,6 +23,9 @@ one_shot = true
 position = Vector2(0, -286)
 scale = Vector2(18.3359, 11.8906)
 texture = ExtResource("1_gi7kc")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(0, -1400)
 
 [node name="LocationManager" parent="." node_paths=PackedStringArray("above_stage", "below_stage", "left_stage", "right_stage") instance=ExtResource("5_vcsse")]
 above_stage = NodePath("AboveStage")

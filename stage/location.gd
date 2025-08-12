@@ -15,6 +15,7 @@ signal finished()
 @onready var light_timer: Timer = $LightTimer
 
 var actors: Array[Actor]
+var isTurningOff: bool
 
 
 func send_actor(actor: Actor, duration: float = 1.0) -> void:
@@ -40,9 +41,10 @@ func take_actor(nickname: String) -> Actor:
 
 func toggle_light(command: LightCommand) -> void:
 	spot_light.color = command.color
+	isTurningOff = command.shut_off
 	
 	if command.shut_off:
-		spot_light.enabled = false
+		_turn_off()
 	elif command.delay > 0:
 		light_timer.start(command.delay)
 	else:
@@ -50,6 +52,7 @@ func toggle_light(command: LightCommand) -> void:
 
 
 func _ready() -> void:
+	_update_layer(layer)
 	spot_light.enabled = false
 
 
@@ -58,15 +61,12 @@ func _update_layer(value: int) -> void:
 		var spot: PointLight2D = get_node("SpotLight")
 		spot.range_z_min = value
 		spot.range_z_max = value
-	
-	if has_node("Sprite2D"):
-		var spot: PointLight2D = get_node("Sprite2D")
-		spot.z_index = value
 
 func _move_actor(actor: Actor, duration: float, start: Vector2, target: Vector2) -> void:
 	# reparent
 	actor.reparent(actor_node)
 	actor.global_position = start
+	actor.z_index = layer
 	actors.push_back(actor)
 	
 	# move to location
@@ -78,8 +78,15 @@ func _turn_on() -> void:
 	spot_light.enabled = true
 	finished.emit()
 
-func _on_light_timer_timeout():
-	_turn_on()
+func _turn_off() -> void:
+	spot_light.enabled = false
+	finished.emit()
+
+func _on_light_timer_timeout() -> void:
+	if isTurningOff:
+		_turn_off()
+	else:
+		_turn_on()
 
 func _relocation_finished() -> void:
 	finished.emit()

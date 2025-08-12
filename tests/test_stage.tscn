@@ -5,6 +5,6 @@
 
 [node name="TestStage" type="Node"]
 script = ExtResource("1_ien2s")
-file_name = "demo"
+file_name = "test_light"
 
 [node name="Stage" parent="." instance=ExtResource("1_2mf18")]

@@ -9,7 +9,6 @@ var duration: float
 var cycle: float
 var volume: float
 var shouldStop: bool
-var playthrough: bool
 
 
 func _init(
@@ -21,7 +20,6 @@ func _init(
 	_cycle: float = 1.0, 
 	_volume: float = 0.0, 
 	_shouldStop: bool = false,
-	_playthrough: bool = false
 ) -> void:
 	super._init(num)
 	
@@ -32,4 +30,3 @@ func _init(
 	cycle = _cycle
 	volume = _volume
 	shouldStop = _shouldStop
-	playthrough = _playthrough

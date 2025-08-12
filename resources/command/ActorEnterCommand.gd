@@ -22,7 +22,7 @@ func _init(num: int,
 		"up-center":
 			location = Stage.Location.UP_CENTER
 		"up-right":
-			location = Stage.Location.UP_CENTER
+			location = Stage.Location.UP_RIGHT
 		"left":
 			location = Stage.Location.LEFT
 		"center":

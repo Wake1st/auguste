@@ -51,7 +51,7 @@ A Puppet Show Maker.
 	- optional: loop (default := indefinite)
 	- optional: set volume with `-v` (default := 0.0 db)
 	- optional: will skip to the next step when `-p` is written (default := false)
-- `light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]`
+- `light *type* *rgba(red,green,blue,alpha)* [-o] [-d *delay*] [-l *location*]`
 	- description: illuminates the stage
 	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
 	- required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`

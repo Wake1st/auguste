@@ -7,45 +7,37 @@
 script = ExtResource("1_6u7ts")
 
 [node name="LocationUpLeft" parent="." instance=ExtResource("1_vw450")]
-z_index = 1
-position = Vector2(-400, -160)
+position = Vector2(-400, -60)
 layer = 1
 
 [node name="LocationUp" parent="." instance=ExtResource("1_vw450")]
-z_index = 1
-position = Vector2(0, -160)
+position = Vector2(0, -60)
 layer = 1
 
 [node name="LocationUpRight" parent="." instance=ExtResource("1_vw450")]
-z_index = 1
-position = Vector2(400, -160)
+position = Vector2(400, -60)
 layer = 1
 
 [node name="LocationLeft" parent="." instance=ExtResource("1_vw450")]
-z_index = 2
-position = Vector2(-460, 0)
+position = Vector2(-460, 100)
 layer = 2
 
 [node name="LocationCenter" parent="." instance=ExtResource("1_vw450")]
-z_index = 2
+position = Vector2(0, 100)
 layer = 2
 
 [node name="LocationRight" parent="." instance=ExtResource("1_vw450")]
-z_index = 2
-position = Vector2(460, 0)
+position = Vector2(460, 100)
 layer = 2
 
 [node name="LocationDownLeft" parent="." instance=ExtResource("1_vw450")]
-z_index = 3
-position = Vector2(-520, 160)
+position = Vector2(-520, 260)
 layer = 3
 
 [node name="LocationDown" parent="." instance=ExtResource("1_vw450")]
-z_index = 3
-position = Vector2(0, 160)
+position = Vector2(0, 260)
 layer = 3
 
 [node name="LocationDownRight" parent="." instance=ExtResource("1_vw450")]
-z_index = 3
-position = Vector2(520, 160)
+position = Vector2(520, 260)
 layer = 3

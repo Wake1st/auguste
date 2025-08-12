@@ -40,6 +40,8 @@ signal finished()
 
 const ACTOR_SCENE = preload("res://stage/actor.tscn")
 
+@export var spawn_point: Marker2D
+
 @onready var interpreter: ScriptInterpreter = $ScriptInterpreter
 @onready var sound_manager: SoundManager = $SoundManager
 @onready var location_manager: LocationManager = $LocationManager
@@ -80,6 +82,7 @@ func _next_command() -> void:
 		actor.finished.connect(_on_command_finished)
 		
 		actor_node.add_child(actor)
+		actor.position = spawn_point.position
 		actors.set(actor.name, actor)
 		
 		_on_command_finished()
