@@ -10,7 +10,7 @@ var duration: float
 func _init(num: int, 
 	_name: String, 
 	_location: String, 
-	_duration: float = 1.0, 
+	_duration: float, 
 ) -> void:
 	super._init(num)
 	

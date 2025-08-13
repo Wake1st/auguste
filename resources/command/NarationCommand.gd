@@ -3,13 +3,11 @@ extends Command
 
 
 var dialog: String
-var delay: float
 var duration: float
 
 
 func _init(num: int, _dialog: String, _delay: float, _duration: float) -> void:
-	super._init(num)
+	super._init(num, _delay)
 	
 	dialog = _dialog
-	delay = _delay
 	duration = _duration

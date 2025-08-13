@@ -20,5 +20,6 @@ animate 'Alice' 'wobble' -t 0.2 -c 5
 
 narate "Alice wobbled" -t 2.0
 
+move 'Alice' down-center
 speak 'Alice' "Gooodbyyyyyyyyyyyyyyyyyyyyyyyyeeeeee" -t 4.0
 exit 'Alice' down-center -d above -t 5.0 

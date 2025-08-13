@@ -5,7 +5,6 @@ extends Command
 var type: Stage.Light
 var location: Stage.Location
 var color: Color
-var delay: float
 var shut_off: bool
 
 
@@ -14,13 +13,12 @@ func _init(
 	_type: String, 
 	_location: String, 
 	_color: Color, 
-	_delay: float = 0.0, 
-	_shut_off: bool = false
+	_delay: float, 
+	_shut_off: bool
 ) -> void:
-	super._init(num)
+	super._init(num, _delay)
 	
 	color = _color
-	delay = _delay
 	shut_off = _shut_off
 	
 	match _type.to_lower():

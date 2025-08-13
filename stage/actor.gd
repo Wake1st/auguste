@@ -13,10 +13,10 @@ signal finished()
 @onready var player: AnimationPlayer = $AnimationPlayer
 
 var location: Stage.Location
-var current_animation: ActorAnimateCommand
+var current_animation: AnimateCommand
 
 
-func animate(command: ActorAnimateCommand) -> void:
+func animate(command: AnimateCommand) -> void:
 	current_animation = command
 	_cycle_animation()
 

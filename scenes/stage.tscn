@@ -16,7 +16,10 @@ spawn_point = NodePath("SpawnPoint")
 
 [node name="SoundManager" parent="." instance=ExtResource("3_vcsse")]
 
-[node name="WaitTimer" type="Timer" parent="."]
+[node name="DelayTimers" type="Node" parent="."]
+
+[node name="WaitTimer" type="Timer" parent="DelayTimers"]
+unique_name_in_owner = true
 one_shot = true
 
 [node name="Backdrop" type="Sprite2D" parent="."]
@@ -57,4 +60,4 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[connection signal="timeout" from="WaitTimer" to="." method="_on_command_finished"]
+[connection signal="timeout" from="DelayTimers/WaitTimer" to="." method="_on_command_finished"]

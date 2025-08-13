@@ -2,16 +2,14 @@ class_name SpeakCommand
 extends Command
 
 
-var actor: String
+var name: String
 var dialog: String
-var delay: float
 var duration: float
 
 
-func _init(num: int, name: String, _dialog: String, _delay: float, _duration: float) -> void:
-	super._init(num)
+func _init(num: int, _name: String, _dialog: String, _delay: float, _duration: float) -> void:
+	super._init(num, _delay)
 	
-	actor = name
+	name = _name
 	dialog = _dialog
-	delay = _delay
 	duration = _duration

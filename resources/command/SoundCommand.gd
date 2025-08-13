@@ -3,7 +3,6 @@ extends Command
 
 
 var name: String
-var delay: float
 var start: float
 var duration: float
 var cycle: float
@@ -21,10 +20,9 @@ func _init(
 	_volume: float = 0.0, 
 	_shouldStop: bool = false,
 ) -> void:
-	super._init(num)
+	super._init(num, _delay)
 	
 	name = _name
-	delay = _delay
 	start = _start
 	duration = _duration
 	cycle = _cycle

@@ -35,12 +35,12 @@ func light_command(command: LightCommand) -> void:
 	location.toggle_light(command)
 
 
-func send_actor(actor: Actor, command: ActorMoveCommand) -> void:
+func send_actor(actor: Actor, command: MoveCommand) -> void:
 	var location: Location = get_location(command.location)
 	location.send_actor(actor, command.duration)
 
 
-func enter_actor(actor: Actor, command: ActorEnterCommand) -> void:
+func enter_actor(actor: Actor, command: EnterCommand) -> void:
 	# get the target location
 	var location: Location = get_location(command.location)
 	
@@ -61,7 +61,7 @@ func enter_actor(actor: Actor, command: ActorEnterCommand) -> void:
 
 
 
-func exit_actor(actor: Actor, command: ActorExitCommand) -> void:
+func exit_actor(actor: Actor, command: ExitCommand) -> void:
 	# get the target location
 	var location: Location = get_location(command.location)
 	

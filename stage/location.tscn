@@ -6,9 +6,6 @@
 [node name="Location" type="Marker2D"]
 script = ExtResource("1_mssa3")
 
-[node name="LightTimer" type="Timer" parent="."]
-one_shot = true
-
 [node name="ActorNode" type="Node2D" parent="."]
 
 [node name="SpotLight" type="PointLight2D" parent="."]
@@ -20,5 +17,3 @@ range_z_min = 0
 range_z_max = 0
 texture = ExtResource("1_80yxl")
 texture_scale = 0.8
-
-[connection signal="timeout" from="LightTimer" to="." method="_on_light_timer_timeout"]

@@ -45,10 +45,11 @@ const ACTOR_SCENE = preload("res://stage/actor.tscn")
 @onready var interpreter: ScriptInterpreter = $ScriptInterpreter
 @onready var sound_manager: SoundManager = $SoundManager
 @onready var location_manager: LocationManager = $LocationManager
-@onready var wait_timer: Timer = $WaitTimer
+@onready var wait_timer: Timer = %WaitTimer
 @onready var dialog_display: DialogDisplay = %DialogDisplay
 @onready var title_display: TitleDisplay = %TitleDisplay
 
+@onready var delay_timers: Node = $DelayTimers
 @onready var actor_node: Node2D = $Actors
 
 var commands: Array[Command]
@@ -69,16 +70,32 @@ func _next_command() -> void:
 		return
 	
 	# process the new command
-	var hasDialog: bool
 	var command = commands[command_index]
-	if command is SceneCreateCommand:
+	
+	# delayed commands will be bound to a timer
+	if command.has_delay():
+		_delay_command(command)
+		_next_command()
+	else:
+		_run(command)
+
+
+func _ready() -> void:
+	sound_manager.setup(_on_command_finished)
+	location_manager.setup(_on_command_finished)
+	dialog_display.finished.connect(_on_command_finished)
+	title_display.finished.connect(_on_command_finished)
+
+
+func _run(command: Command) -> void:
+	if command is SceneCommand:
 		# display title card
-		title_display.display((command as SceneCreateCommand).name)
-	elif command is ActorCreateCommand:
+		title_display.display((command as SceneCommand).name)
+	elif command is ActorCommand:
 		# create an actor
 		var actor: Actor = ACTOR_SCENE.instantiate()
-		actor.name = (command as ActorCreateCommand).name
-		actor.texture = (command as ActorCreateCommand).texture
+		actor.name = (command as ActorCommand).name
+		actor.texture = (command as ActorCommand).texture
 		actor.finished.connect(_on_command_finished)
 		
 		actor_node.add_child(actor)
@@ -98,55 +115,43 @@ func _next_command() -> void:
 		wait_timer.start((command as WaitCommand).duration)
 	elif command is NarationCommand:
 		dialog_display.show_naration(command)
-	elif command is ActorEnterCommand:
-		var actor_command = command as ActorEnterCommand
+	elif command is SpeakCommand:
+		var actor_command = command as SpeakCommand
+		var actor: Actor = actors[actor_command.name]
+		dialog_display.show_dialog(actor, actor_command)
+	elif command is EnterCommand:
+		var actor_command = command as EnterCommand
 		var actor: Actor = actors[actor_command.name]
 		location_manager.enter_actor(actor, actor_command)
-		
-		if command.has_dialog():
-			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
-			hasDialog = true
-	elif command is ActorExitCommand:
-		var actor_command = command as ActorExitCommand
+	elif command is ExitCommand:
+		var actor_command = command as ExitCommand
 		var actor: Actor = actors[actor_command.name]
 		location_manager.exit_actor(actor, actor_command)
-		
-		if command.has_dialog():
-			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
-			hasDialog = true
-	elif command is ActorMoveCommand:
-		var actor_command = command as ActorMoveCommand
+	elif command is MoveCommand:
+		var actor_command = command as MoveCommand
 		var actor: Actor = actors[actor_command.name]
 		location_manager.send_actor(actor, actor_command)
-		
-		if command.has_dialog():
-			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
-			hasDialog = true
-	elif command is ActorAnimateCommand:
-		var actor_command = command as ActorAnimateCommand
+	elif command is AnimateCommand:
+		var actor_command = command as AnimateCommand
 		var actor: Actor = actors[actor_command.name]
 		actor.animate(actor_command)
-		
-		if command.has_dialog():
-			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
-			hasDialog = true
 	elif command is ErrorCommand:
 		# TODO: errors should have their own UI
 		print((command as ErrorCommand).msg())
 		#dialog_display.show_naration((command as ErrorCommand).msg())
-		hasDialog = true
-	
-	# check to see if dialogue needs to be kept
-	if not hasDialog:
-		dialog_display.toggle_close()
 
 
-func _ready() -> void:
-	sound_manager.setup(_on_command_finished)
-	location_manager.setup(_on_command_finished)
-	dialog_display.finished.connect(_on_command_finished)
-	title_display.finished.connect(_on_command_finished)
+func _delay_command(command: Command) -> void:
+	var timer: Timer = Timer.new()
+	delay_timers.add_child(timer)
+	timer.one_shot = true
+	timer.timeout.connect(_on_delay_timer_finished.bind(timer, command))
+	timer.start(command.delay)
 
+func _on_delay_timer_finished(timer: Timer, command: Command) -> void:
+	_run(command)
+	timer.queue_free()
 
-func _on_command_finished() -> void:
-	_next_command()
+func _on_command_finished(wasDelayed: bool = false) -> void:
+	if not wasDelayed:
+		_next_command()
