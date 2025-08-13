@@ -21,7 +21,7 @@ func process(script: ScriptData) -> Array[Command]:
 			"scene": # scene 'name'
 				var nickname = line.split("'")[1]
 				
-				commands.push_back(SceneCreateCommand.new(
+				commands.push_back(SceneCommand.new(
 					line_number, nickname
 				))
 			"actor": # actor 'name' 'texture'
@@ -29,7 +29,7 @@ func process(script: ScriptData) -> Array[Command]:
 				var filename = line.split("'")[3] # skips cause there's a space
 				
 				var texture: Texture2D = Assets.textures[filename]
-				commands.push_back(ActorCreateCommand.new(
+				commands.push_back(ActorCommand.new(
 					line_number, nickname, texture
 				))
 			"wait": # wait *duration*
@@ -60,49 +60,63 @@ func process(script: ScriptData) -> Array[Command]:
 				commands.push_back(LightCommand.new(
 					line_number, type, location, color, delay, off
 				))
+			"narate": # narate "text" [-d *delay*] [-d *duration*]
+				var dialog = get_dialogue(line)
+				var delay = get_optional_float("-d", args, 0.0)
+				var duration = get_optional_float("-t", args, 1.0)
+				
+				commands.push_back(NarationCommand.new(
+					line_number, dialog, delay, duration
+				))
+			"speak": # speak 'actor' "text" [-t *dialog*] [-d *delay*]
+				var actor_name = line.split("'")[1]
+				var dialog = get_dialogue(line)
+				var delay = get_optional_float("-d", args, 0.0)
+				var duration = get_optional_float("-t", args, 1.0)
+				
+				commands.push_back(SpeakCommand.new(
+					line_number, actor_name, dialog, delay, duration
+				))
+			"enter": # enter 'actor' *location* [-d *from*] [-t *duration*]
+				var actor_name = line.split("'")[1]
+				var location = args[2]
+				var direction = get_optional_string("-d", args)
+				var duration = get_optional_float("-t", args, 1.0)
+				
+				commands.push_back(EnterCommand.new(
+					line_number, actor_name, location, direction, duration
+				))
+			"exit": # exit 'actor' *location* [-d *to*] [-t *duration*]
+				var actor_name = line.split("'")[1]
+				var location = args[2]
+				var direction = get_optional_string("-d", args)
+				var duration = get_optional_float("-t", args, 1.0)
+				
+				commands.push_back(ExitCommand.new(
+					line_number, actor_name, location, direction, duration
+				))
+			"move": # move 'actor' *location* [-s *sub-location*]
+				var actor_name = line.split("'")[1]
+				var location = args[2]
+				var duration = get_optional_float("-t", args, 1.0)
+				
+				commands.push_back(MoveCommand.new(
+					line_number, actor_name, location, duration
+				))
+			"animate": # animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]
+				var actor_name = line.split("'")[1]
+				var animation = line.split("'")[3]
+				var duration = get_optional_float("-t", args, 1.0)
+				var cycle = get_optional_float("-c", args, 1.0)
+				
+				commands.push_back(AnimateCommand.new(
+					line_number, actor_name, animation, duration, cycle
+				))
 			_:
-				# check for actor commands
-				if args[0].ends_with(":"):
-					var actor_name = args[0].replace(":","")
-					var dialog = get_dialogue(line)
-					
-					match args[1]:
-						"enter": # actor: enter *location* [-d *from*] [-t *duration*]
-							var location = args[2]
-							var direction = get_optional_string("-d", args)
-							var duration = get_optional_float("-t", args, 1.0)
-							
-							commands.push_back(ActorEnterCommand.new(
-								line_number, actor_name, location, direction, duration, dialog
-							))
-						"exit": # actor: exit *location* [-d *to*] [-t *duration*]
-							var location = args[2]
-							var direction = get_optional_string("-d", args)
-							var duration = get_optional_float("-t", args, 1.0)
-							
-							commands.push_back(ActorExitCommand.new(
-								line_number, actor_name, location, direction, duration, dialog
-							))
-						"move": # actor move *location* [-s *sub-location*]
-							var location = args[2]
-							var duration = get_optional_float("-t", args, 1.0)
-							
-							commands.push_back(ActorMoveCommand.new(
-								line_number, actor_name, location, duration, dialog
-							))
-						"animate": # actor: animate 'animation name' [-t *duration* || -c *cycle count*]
-							var animation = line.split("'")[1]
-							var duration = get_optional_float("-t", args, 1.0)
-							var cycle = get_optional_float("-c", args, 1.0)
-							
-							commands.push_back(ActorAnimateCommand.new(
-								line_number, actor_name, animation, duration, cycle, dialog
-							))
-				else:
-					commands.push_back(ErrorCommand.new(
-						line_number, 
-						"Expected semi-colon (:) after character name -> check %s" % args[0]
-					))
+				commands.push_back(ErrorCommand.new(
+					line_number, 
+					"Command not recognised: %s" % line
+				))
 		
 		line_number += 1
 	

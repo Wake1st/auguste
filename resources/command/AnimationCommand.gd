@@ -1,7 +1,8 @@
-class_name ActorAnimateCommand
-extends ActorCommand
+class_name AnimateCommand
+extends Command
 
 
+var name: String
 var animation: Stage.Animations
 var duration: float
 var cycle: float
@@ -13,9 +14,12 @@ func _init(
 	_animation: String, 
 	_duration: float, 
 	_cycle: float, 
-	_dialog: String = ""
 ) -> void:
-	super._init(num, _name, _dialog)
+	super._init(num)
+	
+	name = _name
+	duration = _duration
+	cycle = _cycle
 	
 	match _animation:
 		"bounce":
@@ -26,6 +30,3 @@ func _init(
 			animation = Stage.Animations.ROCK
 		"spin":
 			animation = Stage.Animations.SPIN
-	
-	duration = _duration
-	cycle = _cycle

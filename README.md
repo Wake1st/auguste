@@ -25,12 +25,12 @@ A Puppet Show Maker.
 		- [ ] sub-locations
 	- [ ] debug/follow the script
 - [ ] scripts
+	- [x] light
+	- [x] sound
+	- [x] wait
+	- [x] actor
+	- [x] scene
 	- [ ] add comments
-	- [ ] sound
-	- [ ] light
-	- [ ] wait
-	- [ ] actor
-	- [ ] scene
 - [ ] export
 	- [ ] scripts
 	- [ ] recording
@@ -55,33 +55,43 @@ A Puppet Show Maker.
 	- description: illuminates the stage
 	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
 	- required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`
-	- optional: a delay of `*delay*` seconds, including decimals
+	- optional: a delay of `delay` seconds, including decimals
+- `narate "text" [-d *delay*] [-t *duration*]`
+	- description: provides naration
+	- required: some `text` wrapped in double quotes
+	- optional: delays the dialog for `delay` seconds (default := 1.0)
+	- optional: the `duration` that the text remains after printing (default := 1.0)
 - `actor 'name' 'texture'`
 	- description: defines a actor
-	- required: a `'name'` which will be used to identity the actor
+	- required: a `name` which will be used to identity the actor
 	- required: a texture to visually represent the actor
-- `actor: [*action*] ["dialogue"]`
+- `speak 'actor' "dialogue" [-d *delay*] [-t *duration*]`
 	- description: commands a actor to do and/or say something
-	- required: at least one `action` or `"dialogue"` is required, both can be optional
-	- optional: an `action` for the actor to perform
-	- optional: `"dialogue"` for the actor to "say" (the dialogue will be displayed as subtitles at the bottom of the stage)
-	- `enter *location* [-d *from*] [-t *duration*]`
-		- description: introduces a actor onto the stage
-		- required: `location` on stage to put the actor
-		- optional: `from`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
-		- optional: the `duration` which the entrance lasts (default is one second)
-	- `exit *location* [-d *to*] [-t *duration*]`
-		- description: introduces a actor onto the stage
-		- required: `location` on stage to put the actor
-		- optional: `to`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
-		- optional: the `duration` which the exit lasts (default is one second)
-	- `move *location* [-s *sub-location*]`
-		- required: `location`, a specific place on screen
-		- optional: `sub-location`, relative to anything already there
-	- `animate 'animation name' [-t *duration* || -c *cycle count*]`:
-		- description: animates the actor
-		- required: `'animation name'` to specify the type of animation to play
-		- optional: a specific time or cycle count (default is one second)
+	- required: `dialogue` for the actor to "say"
+	- optional: delays the dialog for `delay` seconds (default := 1.0)
+	- optional: the `duration` that the text remains after printing (default := 1.0)
+- `enter 'actor' *location* [-d *direction*] [-t *duration*]`
+	- description: introduces a actor onto the stage
+	- required: the `actor` to command
+	- required: `location` on stage to put the actor
+	- optional: `direction`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
+	- optional: the `duration` which the entrance lasts (default is one second)
+- `exit 'actor' *location* [-d *direction*] [-t *duration*]`
+	- description: introduces a actor onto the stage
+	- required: the `actor` to command
+	- required: `location` on stage to put the actor
+	- optional: `direction`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
+	- optional: the `duration` which the exit lasts (default is one second)
+- `move 'actor' *location* [-s *sub-location*]`
+	- description: moves an actor to the specified `location`
+	- required: the `actor` to command
+	- required: `location`, a specific place on screen
+	- optional: `sub-location`, relative to anything already there
+- `animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]`:
+	- description: animates the actor
+	- required: the `actor` to command
+	- required: the `animation name` to specify the type of animation to play
+	- optional: a specific time or cycle count (default is one second)
 
 ### Actions
 
@@ -136,3 +146,9 @@ celeste: animate "bounce" -c 3
 After some initial setup of importing assets and a basic stage, I have begun work on the \
 script interpreter. I'm thinking of turning these strings into `Commands`, \
 wherein each command can be utilized via data instead of constant string checking.
+
+### 8/12/2025
+
+The commands needed a rewrite, which is a pain, but separating dialog \
+from the other actor commands allows for more dialog specific commands. \
+Also, the keyword explanation in the docs is just cursed - it needs formatting.

@@ -7,6 +7,7 @@
 script = ExtResource("1_mssa3")
 
 [node name="LightTimer" type="Timer" parent="."]
+one_shot = true
 
 [node name="ActorNode" type="Node2D" parent="."]
 
@@ -15,8 +16,8 @@ position = Vector2(0, -100)
 enabled = false
 color = Color(0.970238, 0.959011, 0.78156, 1)
 energy = 16.0
-range_z_min = 3
-range_z_max = 3
+range_z_min = 0
+range_z_max = 0
 texture = ExtResource("1_80yxl")
 texture_scale = 0.8
 

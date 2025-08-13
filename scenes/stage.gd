@@ -97,8 +97,7 @@ func _next_command() -> void:
 		# waits with dramatic pause
 		wait_timer.start((command as WaitCommand).duration)
 	elif command is NarationCommand:
-		dialog_display.show_naration(command.dialog)
-		hasDialog = true
+		dialog_display.show_naration(command)
 	elif command is ActorEnterCommand:
 		var actor_command = command as ActorEnterCommand
 		var actor: Actor = actors[actor_command.name]
@@ -132,7 +131,9 @@ func _next_command() -> void:
 			dialog_display.show_dialog(actor.name, actor.texture, command.dialog)
 			hasDialog = true
 	elif command is ErrorCommand:
-		dialog_display.show_naration((command as ErrorCommand).msg())
+		# TODO: errors should have their own UI
+		print((command as ErrorCommand).msg())
+		#dialog_display.show_naration((command as ErrorCommand).msg())
 		hasDialog = true
 	
 	# check to see if dialogue needs to be kept

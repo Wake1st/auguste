@@ -9,8 +9,19 @@ var delay: float
 var shut_off: bool
 
 
-func _init(num: int, _type: String, _location: String, _color: Color, _delay: float = 0.0, _shut_off: bool = false) -> void:
+func _init(
+	num: int, 
+	_type: String, 
+	_location: String, 
+	_color: Color, 
+	_delay: float = 0.0, 
+	_shut_off: bool = false
+) -> void:
 	super._init(num)
+	
+	color = _color
+	delay = _delay
+	shut_off = _shut_off
 	
 	match _type.to_lower():
 		"fresnel":
@@ -37,10 +48,6 @@ func _init(num: int, _type: String, _location: String, _color: Color, _delay: fl
 			location = Stage.Location.DOWN_CENTER
 		"down-right":
 			location = Stage.Location.DOWN_RIGHT
-	
-	color = _color
-	delay = _delay
-	shut_off = _shut_off
 
 
 func has_delay() -> bool:

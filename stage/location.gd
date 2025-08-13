@@ -49,12 +49,13 @@ func toggle_light(command: LightCommand) -> void:
 		light_timer.start(command.delay)
 	else:
 		_turn_on()
+	
+	finished.emit()
 
 
 func _ready() -> void:
 	_update_layer(layer)
 	spot_light.enabled = false
-
 
 func _update_layer(value: int) -> void:
 	if has_node("SpotLight"):
@@ -76,11 +77,9 @@ func _move_actor(actor: Actor, duration: float, start: Vector2, target: Vector2)
 
 func _turn_on() -> void:
 	spot_light.enabled = true
-	finished.emit()
 
 func _turn_off() -> void:
 	spot_light.enabled = false
-	finished.emit()
 
 func _on_light_timer_timeout() -> void:
 	if isTurningOff:

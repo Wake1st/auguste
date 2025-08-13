@@ -9,15 +9,22 @@ const CHARACTERS_PER_SECOND: int = 100
 @onready var lbl_name: Label = %LblName
 @onready var text_rect: TextureRect = %TextureRect
 @onready var lbl_dialog: RichTextLabel = %RichTextLabel
+
 @onready var animation: AnimationPlayer = $AnimationPlayer
+@onready var timer: Timer = $Timer
 
 var isOpen: bool
+var duration: float
 
 
-func show_naration(dialog: String) -> void:
-	lbl_dialog.visible_ratio = 0.0
-	lbl_dialog.text = dialog
+func show_naration(command: NarationCommand) -> void:
+	lbl_name.text = "naration"
+	text_rect.texture = null
 	
+	lbl_dialog.visible_ratio = 0.0
+	lbl_dialog.text = command.dialog
+	
+	duration = command.duration
 	_toggle_open()
 
 
@@ -54,5 +61,8 @@ func _on_animation_player_animation_finished(anim_name) -> void:
 	if anim_name == "slide" && isOpen:
 		_type_text()
 	elif anim_name == "type":
-		pass
-		#finished.emit()
+		timer.start(duration)
+
+
+func _on_timer_timeout():
+	finished.emit()

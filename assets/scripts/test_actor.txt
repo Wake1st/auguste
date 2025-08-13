@@ -1,10 +1,20 @@
 actor 'Alice' 'image-551'
 
-Alice: enter right below -t 3.0 "Taaaaadaaaaaaaa..."
-Alice: move down-left -t 4.0 "Willowing, billowing, the trees do bend."
-Alice: animate 'bounce' -t 2.0 -c 2 "bounce"
-Alice: animate 'spin' -t 2.0 -c 2 "spin"
-Alice: animate 'rock' -t 2.0 -c 2 "rock"
-Alice: animate 'wobble' -t 2.0 -c 2 "wobble"
-Alice: move down-center -t 2.0 "welp..."
-Alice: exit down-center above -t 3.0 "Gooodbyyyyyyyyyyyyyyyyyyyyyyyyeeeeee"
+Alice: "Taaaaadaaaaaaaa..." -t 3.0
+enter 'Alice' right below -t 3.0 
+Alice: "Willowing, billowing, the trees do bend." -t 4.0
+move 'Alice' down-left -t 4.0 
+
+Alice: "bounce" -t 2.0
+animate 'Alice' 'bounce' -t 2.0 -c 2 
+Alice: "spin" -t 2.0
+animate 'Alice' 'spin' -t 2.0 -c 2 
+Alice: "rock" -t 2.0
+animate 'Alice' 'rock' -t 2.0 -c 2 
+Alice: "wobble" -t 2.0
+animate 'Alice' 'wobble' -t 2.0 -c 2 
+
+Alice: "welp..." -t 2.0
+move 'Alice' down-center -t 2.0 
+Alice: "Gooodbyyyyyyyyyyyyyyyyyyyyyyyyeeeeee" -t 3.0
+exit 'Alice' down-center above -t 3.0 

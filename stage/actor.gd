@@ -25,19 +25,19 @@ func _cycle_animation() -> void:
 	if current_animation.cycle > 0:
 		current_animation.cycle -= 1
 		player.speed_scale = 1 / current_animation.duration
+		
+		match current_animation.animation:
+			Stage.Animations.BOUNCE:
+				player.play("bounce")
+			Stage.Animations.WOBBLE:
+				player.play("wobble")
+			Stage.Animations.ROCK:
+				player.play("rock")
+			Stage.Animations.SPIN:
+				player.play("spin")
 	else:
 		player.stop()
 		finished.emit()
-	
-	match current_animation.animation:
-		Stage.Animations.BOUNCE:
-			player.play("bounce")
-		Stage.Animations.WOBBLE:
-			player.play("wobble")
-		Stage.Animations.ROCK:
-			player.play("rock")
-		Stage.Animations.SPIN:
-			player.play("spin")
 
 
 func _on_animation_player_animation_finished(_anim_name) -> void:
