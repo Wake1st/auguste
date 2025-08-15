@@ -70,13 +70,13 @@ A Puppet Show Maker.
 	- required: `dialogue` for the actor to "say"
 	- optional: delays the dialog for `delay` seconds (default := 1.0)
 	- optional: the `duration` that the text remains after printing (default := 1.0)
-- `enter 'actor' *location* [-d *direction*] [-t *duration*]`
+- `enter 'actor' *location* [-dr *direction*] [-t *duration*]`
 	- description: introduces a actor onto the stage
 	- required: the `actor` to command
 	- required: `location` on stage to put the actor
 	- optional: `direction`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
 	- optional: the `duration` which the entrance lasts (default is one second)
-- `exit 'actor' *location* [-d *direction*] [-t *duration*]`
+- `exit 'actor' *location* [-dr *direction*] [-t *duration*]`
 	- description: introduces a actor onto the stage
 	- required: the `actor` to command
 	- required: `location` on stage to put the actor

@@ -44,9 +44,10 @@ func show_dialog(actor: Actor, command: SpeakCommand) -> void:
 	_toggle_open()
 
 
-
 func _toggle_open() -> void:
 	if isOpen:
+		# override old times
+		timer.stop()
 		_type_text()
 	else:
 		isOpen = true
@@ -66,7 +67,7 @@ func _on_animation_player_animation_finished(anim_name) -> void:
 		_type_text()
 	elif anim_name == "type":
 		timer.start(duration)
-		finished.emit(false)
+		finished.emit(wasDelayed)
 
 func _on_timer_timeout():
 	_toggle_close()

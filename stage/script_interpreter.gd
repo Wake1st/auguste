@@ -80,7 +80,7 @@ func process(script: ScriptData) -> Array[Command]:
 			"enter": # enter 'actor' *location* [-d *from*] [-t *duration*]
 				var actor_name = line.split("'")[1]
 				var location = args[2]
-				var direction = get_optional_string("-d", args)
+				var direction = get_optional_string("-dr", args)
 				var duration = get_optional_float("-t", args, 1.0)
 				
 				commands.push_back(EnterCommand.new(
@@ -89,7 +89,7 @@ func process(script: ScriptData) -> Array[Command]:
 			"exit": # exit 'actor' *location* [-d *to*] [-t *duration*]
 				var actor_name = line.split("'")[1]
 				var location = args[2]
-				var direction = get_optional_string("-d", args)
+				var direction = get_optional_string("-dr", args)
 				var duration = get_optional_float("-t", args, 1.0)
 				
 				commands.push_back(ExitCommand.new(

@@ -50,34 +50,34 @@ void vertex(){
 	p.xy *= v * inv_rot_mat[2].z;
 	o = v * inv_rot_mat[2].xy;
 	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-	
-	
+
+
 	// SPIN
 	float radX = degToRad(x_rot);
 	float radY = degToRad(y_rot);
 	float radZ = degToRad(zDegrees);
-	
+
 	float cosX = cos(radX);
 	float cosY = cos(radY);
 	float cosZ = cos(radZ);
-	
+
 	float sinX = sin(radX);
 	float sinY = sin(radY);
 	float sinZ = sin(radZ);
-	
+
 	mat3 finalRot;
 	finalRot[0][0] = cosZ * cosY;
 	finalRot[1][0] = cosZ * sinY * sinX - sinZ * cosX;
 	finalRot[2][0] = sinZ * sinX + cosZ * sinY * cosX;
-	
+
 	finalRot[0][1] = sinZ * cosY;
 	finalRot[1][1] = cosZ * cosX + sinZ * sinY * sinX;
 	finalRot[2][1] = sinZ * sinY * cosX - cosZ * sinX;
-	
+
 	finalRot[0][2] = -sinY;
 	finalRot[1][2] = cosY * sinX;
 	finalRot[2][2] = cosY * cosX;
-	
+
 	vec3 pos = vec3(VERTEX.xy, 0) * finalRot;
 	VERTEX = pos.xy;
 }
@@ -86,10 +86,10 @@ void fragment() {
 	// WOBBLE
 	if (cull_back && p.z <= 0.0) discard;
 	vec2 uv = (p.xy / p.z).xy - o;
-	
+
 	// BOUNCE
 	uv.y = (uv.y - 0.5) / y_scale + 0.5;
-	
+
 	COLOR = texture(TEXTURE, uv + 0.5);
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }

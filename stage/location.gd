@@ -46,7 +46,7 @@ func toggle_light(command: LightCommand) -> void:
 	else:
 		_turn_on()
 	
-	finished.emit(false)
+	finished.emit(command.has_delay())
 
 
 func _ready() -> void:
