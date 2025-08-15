@@ -152,3 +152,11 @@ wherein each command can be utilized via data instead of constant string checkin
 The commands needed a rewrite, which is a pain, but separating dialog \
 from the other actor commands allows for more dialog specific commands. \
 Also, the keyword explanation in the docs is just cursed - it needs formatting.
+
+### 8/15/2025
+
+After more testing, I think I'm getting to a version I like. \
+The dialog still feels wrong - I might need a "wait for dialog" command \
+or its inverse. I think using "delay" as a surogate "skip" command, \
+or having some commands as an implied skip seems bad. Perhaps "skip" \
+should be its own command - it would offer the user more control.

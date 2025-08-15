@@ -21,6 +21,12 @@ func animate(command: AnimateCommand) -> void:
 	_cycle_animation()
 
 
+func _ready() -> void:
+	if has_node("Sprite2D"):
+		var material = (get_node("Sprite2D") as Sprite2D).material.duplicate(true)
+		(get_node("Sprite2D") as Sprite2D).material = material
+
+
 func _cycle_animation() -> void:
 	if current_animation.cycle > 0:
 		current_animation.cycle -= 1
