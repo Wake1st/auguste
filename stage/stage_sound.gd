@@ -22,7 +22,7 @@ func run(cmd: SoundCommand) -> void:
 	_play_sound()
 	
 	# run the next command
-	completed.emit(false)
+	completed.emit(command.has_delay())
 
 
 func _play_sound() -> void:
@@ -33,8 +33,6 @@ func _play_sound() -> void:
 		if command.duration > 0:
 			isDurated = true
 			timer.start(command.duration)
-	else:
-		completed.emit(false)
 
 
 func _on_timer_timeout() -> void:
