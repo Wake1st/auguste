@@ -30,13 +30,15 @@ A Puppet Show Maker.
 	- [x] wait
 	- [x] actor
 	- [x] scene
-	- [ ] add comments
+	- [x] add comments
 - [ ] export
 	- [ ] scripts
 	- [ ] recording
 
 ## Keywords
 
+- `# comment`
+	- description: anything with the `#` symbol will be passed by the interpreter
 - `scene 'name'`
 	- description: defines a scene, displaying a title card
 	- required: the `'name'` of a scene
@@ -56,20 +58,22 @@ A Puppet Show Maker.
 	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
 	- required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`
 	- optional: a delay of `delay` seconds, including decimals
-- `narate "text" [-d *delay*] [-t *duration*]`
+- `narate "text" [-d *delay*] [-t *duration*] [-w]`
 	- description: provides naration
 	- required: some `text` wrapped in double quotes
 	- optional: delays the dialog for `delay` seconds (default := 1.0)
 	- optional: the `duration` that the text remains after printing (default := 1.0)
+	- optional: force the dialog to wait with `-w`
 - `actor 'name' 'texture'`
 	- description: defines a actor
 	- required: a `name` which will be used to identity the actor
 	- required: a texture to visually represent the actor
-- `speak 'actor' "dialogue" [-d *delay*] [-t *duration*]`
+- `speak 'actor' "dialog" [-d *delay*] [-t *duration*] [-w]`
 	- description: commands a actor to do and/or say something
-	- required: `dialogue` for the actor to "say"
+	- required: `dialog` for the actor to "say"
 	- optional: delays the dialog for `delay` seconds (default := 1.0)
 	- optional: the `duration` that the text remains after printing (default := 1.0)
+	- optional: force the dialog to wait with `-w`
 - `enter 'actor' *location* [-dr *direction*] [-t *duration*]`
 	- description: introduces a actor onto the stage
 	- required: the `actor` to command
@@ -160,3 +164,12 @@ The dialog still feels wrong - I might need a "wait for dialog" command \
 or its inverse. I think using "delay" as a surogate "skip" command, \
 or having some commands as an implied skip seems bad. Perhaps "skip" \
 should be its own command - it would offer the user more control.
+
+### 8/17/2025
+
+Added a wait command for the dialog system so dialog prompts don't override \
+each other. Honestly, this system seems really messy. Duct-taping commands \
+to solve for these exceptions makes for a sloppy language - it definitely \
+needs a redesign, something with event queues? A more sophisticated \
+scheduling system will probably be best, but ultimately, something that \
+simplifies commands for the user.

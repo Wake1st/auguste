@@ -18,6 +18,8 @@ func process(script: ScriptData) -> Array[Command]:
 		
 		# check for initialization statements
 		match args[0]:
+			"#": # comment
+				pass
 			"scene": # scene 'name'
 				var nickname = line.split("'")[1]
 				
@@ -64,18 +66,20 @@ func process(script: ScriptData) -> Array[Command]:
 				var dialog = get_dialogue(line)
 				var delay = get_optional_float("-d", args, 0.0)
 				var duration = get_optional_float("-t", args, 1.0)
+				var wait = get_optional_bool("-w", args)
 				
 				commands.push_back(NarationCommand.new(
-					line_number, dialog, delay, duration
+					line_number, dialog, delay, duration, wait
 				))
-			"speak": # speak 'actor' "text" [-t *dialog*] [-d *delay*]
+			"speak": # speak 'actor' "text" [-t *dialog*] [-d *delay*] [-w]
 				var actor_name = line.split("'")[1]
 				var dialog = get_dialogue(line)
 				var delay = get_optional_float("-d", args, 0.0)
 				var duration = get_optional_float("-t", args, 1.0)
+				var wait = get_optional_bool("-w", args)
 				
 				commands.push_back(SpeakCommand.new(
-					line_number, actor_name, dialog, delay, duration
+					line_number, actor_name, dialog, delay, duration, wait
 				))
 			"enter": # enter 'actor' *location* [-d *from*] [-t *duration*]
 				var actor_name = line.split("'")[1]
@@ -165,7 +169,7 @@ func has_optional_bool(keyword: String, args: Array[String]) -> bool:
 func get_optional_bool(keyword: String, args: Array[String]) -> bool:
 	for i in args.size():
 		if args[i] == keyword:
-			return args[i + 1] as bool
+			return true
 	return false
 
 

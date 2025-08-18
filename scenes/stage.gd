@@ -148,10 +148,20 @@ func _delay_command(command: Command) -> void:
 	timer.timeout.connect(_on_delay_timer_finished.bind(timer, command))
 	timer.start(command.delay)
 
+func _force_wait(waitTime: float) -> void:
+	var timer: Timer = Timer.new()
+	delay_timers.add_child(timer)
+	timer.one_shot = true
+	timer.start(waitTime)
+	await timer.timeout
+
 func _on_delay_timer_finished(timer: Timer, command: Command) -> void:
 	_run(command)
 	timer.queue_free()
 
-func _on_command_finished(wasDelayed: bool = false) -> void:
+func _on_command_finished(wasDelayed: bool = false, waitTime: float = -1.0) -> void:
+	if waitTime > 0.0:
+		await _force_wait(waitTime)
+	
 	if not wasDelayed:
 		_next_command()

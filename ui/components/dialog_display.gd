@@ -15,6 +15,7 @@ const CHARACTERS_PER_SECOND: int = 100
 
 var isOpen: bool
 var wasDelayed: float
+var shouldWait: bool
 var duration: float
 
 
@@ -27,6 +28,7 @@ func show_naration(command: NarationCommand) -> void:
 	
 	wasDelayed = command.has_delay()
 	duration = command.duration
+	shouldWait = command.wait
 	
 	_toggle_open()
 
@@ -40,6 +42,7 @@ func show_dialog(actor: Actor, command: SpeakCommand) -> void:
 	
 	wasDelayed = command.has_delay()
 	duration = command.duration
+	shouldWait = command.wait
 	
 	_toggle_open()
 
@@ -67,7 +70,7 @@ func _on_animation_player_animation_finished(anim_name) -> void:
 		_type_text()
 	elif anim_name == "type":
 		timer.start(duration)
-		finished.emit(wasDelayed)
+		finished.emit(wasDelayed, duration if shouldWait else 0.0)
 
 func _on_timer_timeout():
 	_toggle_close()
