@@ -59,10 +59,10 @@ layout_mode = 2
 theme_override_constants/separation = 32
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Import"
+title = "Open a File"
 initial_position = 2
 size = Vector2i(1000, 600)
-ok_button_text = "Import"
+ok_button_text = "Open"
 file_mode = 0
 
 [connection signal="pressed" from="Panel/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/BtnAdd" to="." method="_on_btn_add_pressed"]

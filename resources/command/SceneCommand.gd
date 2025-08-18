@@ -1,4 +1,4 @@
-class_name SceneCreateCommand
+class_name SceneCommand
 extends Command
 
 

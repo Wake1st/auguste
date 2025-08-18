@@ -4,7 +4,6 @@ A Puppet Show Maker.
 
 ## Planning
 
-
 ### Prototype
 
 - [x] import
@@ -13,72 +12,97 @@ A Puppet Show Maker.
 	- [x] scripts
 	- [x] storing files and keeping in RAM
 - [ ] editor
-	- [ ] importing
+	- [x] importing
 	- [ ] exporting
 	- [ ] scripting
+		- [x] commands
 		- [ ] breakpoints
-		- [ ] step through72
+		- [ ] step through
 - [ ] stage
 	- [ ] locations
 		- [x] lighting
 		- [x] passing actor
 		- [ ] sub-locations
 	- [ ] debug/follow the script
+- [ ] scripts
+	- [x] light
+	- [x] sound
+	- [x] wait
+	- [x] actor
+	- [x] scene
+	- [x] add comments
 - [ ] export
 	- [ ] scripts
 	- [ ] recording
 
 ## Keywords
 
+- `# comment`
+	- description: anything with the `#` symbol will be passed by the interpreter
 - `scene 'name'`
 	- description: defines a scene, displaying a title card
 	- required: the `'name'` of a scene
 - `wait *duration*`
 	- description: delays the scene
 	- required: the `duration` of the delay
-- `sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-l [*count*]]]`
+- `sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]] [-v *volume*] [-p]`
 	- description: plays a sound
 	- optional: will stop a currenty playing sound with `-o`
 	- optional: start at a specific `start time` (default := 0.0)
 	- optional: last for a speficic `duration` (default := plays the whole file)
 	- optional: loop (default := indefinite)
-- `light *type* *rgba(red,green,blue,alpha)* [-o -d *delay*] [-l *location*]`
+	- optional: set volume with `-v` (default := 0.0 db)
+	- optional: will skip to the next step when `-p` is written (default := false)
+- `light *type* *rgba(red,green,blue,alpha)* [-o] [-d *delay*] [-l *location*]`
 	- description: illuminates the stage
 	- required: `type`, `fresnel` (illuminates the whole stage) or `spot` (illuminates a specific location, hence the optional `location` parameter)
 	- required: a color using `rgba` function, with the params `red`,`green`, and `blue` to range from `0-255` and `alpha` to range from `0-1`
-	- optional: a delay of `*delay*` seconds, including decimals
+	- optional: a delay of `delay` seconds, including decimals
+- `narate "text" [-d *delay*] [-t *duration*] [-w]`
+	- description: provides naration
+	- required: some `text` wrapped in double quotes
+	- optional: delays the dialog for `delay` seconds (default := 1.0)
+	- optional: the `duration` that the text remains after printing (default := 1.0)
+	- optional: force the dialog to wait with `-w`
 - `actor 'name' 'texture'`
 	- description: defines a actor
-	- required: a `'name'` which will be used to identity the actor
+	- required: a `name` which will be used to identity the actor
 	- required: a texture to visually represent the actor
-- `actor: [*action*] ["dialogue"]`
+- `speak 'actor' "dialog" [-d *delay*] [-t *duration*] [-w]`
 	- description: commands a actor to do and/or say something
-	- required: at least one `action` or `"dialogue"` is required, both can be optional
-	- optional: an `action` for the actor to perform
-	- optional: `"dialogue"` for the actor to "say" (the dialogue will be displayed as subtitles at the bottom of the stage)
-	- `enter *location* [-d *from*] [-t *duration*]`
-		- description: introduces a actor onto the stage
-		- required: `location` on stage to put the actor
-		- optional: `from`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
-		- optional: the `duration` which the entrance lasts (default is one second)
-	- `exit *location* [-d *to*] [-t *duration*]`
-		- description: introduces a actor onto the stage
-		- required: `location` on stage to put the actor
-		- optional: `to`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
-		- optional: the `duration` which the exit lasts (default is one second)
-	- `move *location* [-s *sub-location*]`
-		- required: `location`, a specific place on screen
-		- optional: `sub-location`, relative to anything already there
-	- `animate 'animation name' [-t *duration* || -c *cycle count*]`:
-		- description: animates the actor
-		- required: `'animation name'` to specify the type of animation to play
-		- optional: a specific time or cycle count (default is one second)
+	- required: `dialog` for the actor to "say"
+	- optional: delays the dialog for `delay` seconds (default := 1.0)
+	- optional: the `duration` that the text remains after printing (default := 1.0)
+	- optional: force the dialog to wait with `-w`
+- `enter 'actor' *location* [-dr *direction*] [-t *duration*]`
+	- description: introduces a actor onto the stage
+	- required: the `actor` to command
+	- required: `location` on stage to put the actor
+	- optional: `direction`, the direction from where the actor appears (`below`, `above`, `right`, `left`) (default is `below`)
+	- optional: the `duration` which the entrance lasts (default is one second)
+- `exit 'actor' *location* [-dr *direction*] [-t *duration*]`
+	- description: introduces a actor onto the stage
+	- required: the `actor` to command
+	- required: `location` on stage to put the actor
+	- optional: `direction`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
+	- optional: the `duration` which the exit lasts (default is one second)
+- `move 'actor' *location* [-s *sub-location*]`
+	- description: moves an actor to the specified `location`
+	- required: the `actor` to command
+	- required: `location`, a specific place on screen
+	- optional: `sub-location`, relative to anything already there
+- `animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]`:
+	- description: animates the actor
+	- required: the `actor` to command
+	- required: the `animation name` to specify the type of animation to play
+	- optional: a specific time or cycle count (default is one second)
 
 ### Actions
 
-Actions can be chained together with the ` | ` actor to allow multiple animations to occur in parallel. 
+Actions can be chained together with the ` | ` actor to allow multiple animations to occur in parallel.
 
 EXAMPLES:
+
 ```
 alice: move down-center | animate "bounce" -t 3.2 | animate "rock" -c 4
 ```
@@ -92,11 +116,12 @@ For this script, the stage locations are divided into a 3x3 grid.
 - down / center / up: closer to the audience, center of the stage, and furthest from the audience
 - left / center / right: the left, center, and right side of the stage according to the audience
 
-There is also the option to provide a sub-location with the `-s` parameter; this will move the actor relative to any other actors in a scene. So if a actor is meant to be `down-center up-center` they will go to the `up-center` part of the `down-center` location. 
+There is also the option to provide a sub-location with the `-s` parameter; this will move the actor relative to any other actors in a scene. So if a actor is meant to be `down-center up-center` they will go to the `up-center` part of the `down-center` location.
 
 If a actor(s) are already present in the same `location` and `sub-location`, then the newest actor will be placed in the front.
 
-EXAMPLES: 
+EXAMPLES:
+
 ```
 alice: move down-left
 bob: move up-right
@@ -111,12 +136,12 @@ There is a list of default animations to choose from; these are kept simple for 
 The default duration for an animation is one second; this duration can be modified by either setting a specific time with the `-t` parameter (followed by the length in time, as a float) or by using the `-c` parameter (followed by the number of cycles, as a int).
 
 EXAMPLES:
+
 ```
 alice: animate "bounce"
 bob: animate "bounce" -t 2.3
 celeste: animate "bounce" -c 3
 ```
-
 
 ## Blog
 
@@ -125,3 +150,26 @@ celeste: animate "bounce" -c 3
 After some initial setup of importing assets and a basic stage, I have begun work on the \
 script interpreter. I'm thinking of turning these strings into `Commands`, \
 wherein each command can be utilized via data instead of constant string checking.
+
+### 8/12/2025
+
+The commands needed a rewrite, which is a pain, but separating dialog \
+from the other actor commands allows for more dialog specific commands. \
+Also, the keyword explanation in the docs is just cursed - it needs formatting.
+
+### 8/15/2025
+
+After more testing, I think I'm getting to a version I like. \
+The dialog still feels wrong - I might need a "wait for dialog" command \
+or its inverse. I think using "delay" as a surogate "skip" command, \
+or having some commands as an implied skip seems bad. Perhaps "skip" \
+should be its own command - it would offer the user more control.
+
+### 8/17/2025
+
+Added a wait command for the dialog system so dialog prompts don't override \
+each other. Honestly, this system seems really messy. Duct-taping commands \
+to solve for these exceptions makes for a sloppy language - it definitely \
+needs a redesign, something with event queues? A more sophisticated \
+scheduling system will probably be best, but ultimately, something that \
+simplifies commands for the user.

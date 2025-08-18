@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://bihrjr3befafr"]
+
+[ext_resource type="PackedScene" uid="uid://b5agh5bl2k7m" path="res://stage/location.tscn" id="1_ohm3g"]
+[ext_resource type="Script" uid="uid://w1tieshbnyai" path="res://tests/test_lighting.gd" id="1_v6cti"]
+[ext_resource type="PackedScene" uid="uid://b46ld3jc3q4m1" path="res://stage/actor.tscn" id="2_v6cti"]
+[ext_resource type="Texture2D" uid="uid://dd8ux6153348s" path="res://assets/images/image-551.png" id="3_sgm07"]
+
+[node name="TestLighting" type="Node2D"]
+script = ExtResource("1_v6cti")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Actor" parent="." instance=ExtResource("2_v6cti")]
+z_index = 1
+position = Vector2(0, -80)
+texture = ExtResource("3_sgm07")
+
+[node name="Location" parent="." instance=ExtResource("1_ohm3g")]
+position = Vector2(0, 142)
+layer = 1

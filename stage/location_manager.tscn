@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3 uid="uid://brn4x4hc5qjv4"]
+
+[ext_resource type="Script" uid="uid://w48pneymyb3k" path="res://stage/location_manager.gd" id="1_6u7ts"]
+[ext_resource type="PackedScene" uid="uid://b5agh5bl2k7m" path="res://stage/location.tscn" id="1_vw450"]
+
+[node name="LocationManager" type="Node2D"]
+script = ExtResource("1_6u7ts")
+
+[node name="LocationUpLeft" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(-400, -60)
+layer = 1
+
+[node name="LocationUp" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(0, -60)
+layer = 1
+
+[node name="LocationUpRight" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(400, -60)
+layer = 1
+
+[node name="LocationLeft" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(-460, 100)
+layer = 2
+
+[node name="LocationCenter" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(0, 100)
+layer = 2
+
+[node name="LocationRight" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(460, 100)
+layer = 2
+
+[node name="LocationDownLeft" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(-520, 260)
+layer = 3
+
+[node name="LocationDown" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(0, 260)
+layer = 3
+
+[node name="LocationDownRight" parent="." instance=ExtResource("1_vw450")]
+position = Vector2(520, 260)
+layer = 3

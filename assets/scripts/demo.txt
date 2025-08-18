@@ -1,23 +1,55 @@
+# setup the scene
 scene 'Act 1:1'
 
 actor 'Alice' 'image-551'
+actor 'Bob' 'image-551'
 
-sound 'HauntedPhibes' -l 2
-wait 2.4
-
-light spot -l right rgba(240, 0, 180, 0.9)
+# get started
+light 'spot' rgba(0.9, 0, 0.5, 0.9) -l right 
+sound 'DetectiveBigShoes' -d 1.0 -t 25.0
 wait 1.2
 
-Alice: enter right below -t 3.0 "Taaaaadaaaaaaaa..."
+# introduce Alice
+speak 'Alice' "Taaaaadaaaaaaaa..." -d 1.0 -t 2.0
+enter 'Alice' right -dr below -t 3.0 
 
-light spot -l center rgba(10, 200, 180, 0.9) -d 1.4
-light spot -l down-center rgba(10, 200, 180, 0.9) -d 1.4
-light spot -l down-left rgba(240, 220, 0, 0.9) -d 3.2
-Alice: move down-left -t 4.0 "Willowing, billowing, the trees do bend."
+# introduce Bob
+enter 'Bob' up-left -dr left -t 0.2
+speak 'Bob' "haHA!" -w
 
-sound 'HauntedPhibes' -d 0.6
-Alice: animate 'wiggle' -t 0.2 -c 10 'Wiggle'
+# Alice moves across stage
+light 'spot' rgba(10, 0.8, 0.5, 0.9) -d 1.4 -l center
+light 'spot' rgba(.05, 0.8, 0.5, 0.9) -d 1.4 -l down-center
+light 'spot' rgba(0.9, 0.85, 0, 0.9) -d 3.2 -l down-left
 
-'Alice wiggled'
+speak 'Alice' "Willowing, billowing, the trees do bend." -t 3.0
+move 'Alice' down-left -t 4.0
 
-Alice: exit down-center above -t 5.0 "Gooodbyyyyyyyyyyyyyyyyyyyyyyyyeeeeee"
+# Bob zig-zags across stage
+speak 'Bob' "What kind of pompous trash is that?" -t 2.0
+move 'Bob' up-center -t 0.2
+move 'Bob' down-center -t 0.4
+move 'Bob' down-right -t 0.2
+
+# animate Alice
+speak 'Alice' "Wobble" -t 1.0
+sound 'throat' -b 1.0 -t 0.6
+animate 'Alice' 'wobble' -t 0.2 -c 5 
+
+narate "Alice wobbled" -t 2.0 -w
+
+# animate Bob
+speak 'Bob' "Bounce" -t 1.5
+sound 'throat' -b 1.8
+animate 'Bob' 'bounce' -t 0.5 -c 3 
+
+narate "Bob bounced" -t 2.0 -w
+
+# Bob leaves
+speak 'Bob' "Fool..." -t 1.4
+exit 'Bob' down-right right -dr right -t 1.6
+
+# Alice leaves
+move 'Alice' down-center
+speak 'Alice' "Gooodbyyyyyyyyyyyyyyyyyyyyyyyyeeeeee" -t 4.0
+exit 'Alice' down-center -dr above -t 5.0 

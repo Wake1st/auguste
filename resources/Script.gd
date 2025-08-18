@@ -1,8 +1,8 @@
 class_name ScriptData
 
 
-static var name: String
-static var lines: Array[String]
+var name: String
+var lines: Array[String]
 
 
 func _init(_name: String, _lines: Array[String]) -> void:

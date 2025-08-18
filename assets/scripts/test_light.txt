@@ -1,0 +1,30 @@
+actor 'Alice' 'image-551'
+
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l up-right
+enter 'Alice' up-right -dr right "enter"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l up-right -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l up-center
+move 'Alice' up-center -t 2.0 "up-center"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l up-center -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l up-left
+move 'Alice' up-left -t 2.0 "up-left"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l up-left -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l left
+move 'Alice' left -t 2.0 "left"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l left -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l center
+move 'Alice' center -t 2.0 "center"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l center -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l right
+move 'Alice' right -t 2.0 "right"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l right -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l down-right
+move 'Alice' down-right -t 2.0 "down-right"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l down-right -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l down-center
+move 'Alice' down-center -t 2.0 "down-center"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l down-center -o
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l down-left "exit
+move 'Alice' down-left -t 2.0 "down-left"
+light 'spot' rgba(0.0, 0.8, 0.5, 0.9) -l down-left "exit -o
+exit 'Alice' down-left -dr left "exit"

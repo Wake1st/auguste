@@ -1,13 +1,23 @@
-class_name ActorMoveCommand
-extends ActorCommand
+class_name ExitCommand
+extends Command
 
 
+var name: String
 var location: Stage.Location
+var direction: Stage.Direction
 var duration: float
 
 
-func _init(num: int, _id: String, _location: String, _duration: float = 1.0, _dialog: String = "") -> void:
-	super._init(num, _id, _dialog)
+func _init(num: int, 
+	_name: String, 
+	_location: String, 
+	_direction: String, 
+	_duration: float, 
+) -> void:
+	super._init(num)
+	
+	name = _name
+	duration = _duration
 	
 	match _location.to_lower():
 		"up-left":
@@ -29,4 +39,12 @@ func _init(num: int, _id: String, _location: String, _duration: float = 1.0, _di
 		"down-right":
 			location = Stage.Location.DOWN_RIGHT
 	
-	duration = _duration
+	match _direction.to_lower():
+		"below":
+			direction = Stage.Direction.BELOW
+		"above":
+			direction = Stage.Direction.ABOVE
+		"left":
+			direction = Stage.Direction.LEFT
+		"right":
+			direction = Stage.Direction.RIGHT
