@@ -12,6 +12,7 @@ const FUNC_COLOR: Color = Color("7f1fed")
 const KEYWORD_COLOR: Color = Color("f2740c")
 
 @onready var code_edit: CodeEdit = %CodeEdit
+@onready var error_container: VBoxContainer = %VBoxContainer
 
 
 func _ready() -> void:
@@ -34,15 +35,6 @@ func _on_code_edit_symbol_validate(symbol):
 	pass # Replace with function body.
 
 func _on_code_edit_caret_changed():
-	pass # Replace with function body.
-
-func _on_code_edit_gutter_added():
-	pass # Replace with function body.
-
-func _on_code_edit_gutter_clicked(line, gutter):
-	pass # Replace with function body.
-
-func _on_code_edit_gutter_removed():
 	pass # Replace with function body.
 
 func _on_code_edit_lines_edited_from(from_line, to_line):

@@ -32,7 +32,11 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 
-[node name="CodeEdit" type="CodeEdit" parent="Panel/MarginContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+split_offset = 580
+
+[node name="CodeEdit" type="CodeEdit" parent="Panel/MarginContainer/VSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -56,17 +60,27 @@ caret_blink = true
 highlight_all_occurrences = true
 highlight_current_line = true
 gutters_draw_breakpoints_gutter = true
+gutters_draw_line_numbers = true
 auto_brace_completion_highlight_matching = true
 
-[connection signal="breakpoint_toggled" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_breakpoint_toggled"]
-[connection signal="caret_changed" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_caret_changed"]
-[connection signal="code_completion_requested" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_code_completion_requested"]
-[connection signal="gutter_added" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_gutter_added"]
-[connection signal="gutter_clicked" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_gutter_clicked"]
-[connection signal="gutter_removed" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_gutter_removed"]
-[connection signal="lines_edited_from" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_lines_edited_from"]
-[connection signal="symbol_hovered" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_symbol_hovered"]
-[connection signal="symbol_lookup" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_symbol_lookup"]
-[connection signal="symbol_validate" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_symbol_validate"]
-[connection signal="text_changed" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_text_changed"]
-[connection signal="text_set" from="Panel/MarginContainer/CodeEdit" to="." method="_on_code_edit_text_set"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/VSplitContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VSplitContainer/Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="breakpoint_toggled" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_breakpoint_toggled"]
+[connection signal="caret_changed" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_caret_changed"]
+[connection signal="code_completion_requested" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_code_completion_requested"]
+[connection signal="lines_edited_from" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_lines_edited_from"]
+[connection signal="symbol_hovered" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_symbol_hovered"]
+[connection signal="symbol_lookup" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_symbol_lookup"]
+[connection signal="symbol_validate" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_symbol_validate"]
+[connection signal="text_changed" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_text_changed"]
+[connection signal="text_set" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_text_set"]

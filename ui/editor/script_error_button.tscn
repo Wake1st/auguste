@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://174528xdsttu"]
+
+[ext_resource type="Script" uid="uid://bvwwc4yrhd2o2" path="res://ui/editor/script_error_button.gd" id="1_gupsf"]
+
+[node name="ScriptErrorButton" type="Button"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+text = "ERROR"
+alignment = 0
+script = ExtResource("1_gupsf")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
