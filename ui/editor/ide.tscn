@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdjy4c4mfpy1x"]
+[gd_scene load_steps=3 format=3 uid="uid://bdjy4c4mfpy1x"]
 
 [ext_resource type="Script" uid="uid://dxylfdl1be1qc" path="res://ui/editor/ide.gd" id="1_054e2"]
+[ext_resource type="PackedScene" uid="uid://d18odq5u418yc" path="res://ui/editor/text_editor.tscn" id="2_g1fe6"]
 
 [node name="IDE" type="Control"]
 layout_mode = 3
@@ -36,32 +37,9 @@ theme_override_constants/margin_bottom = 32
 layout_mode = 2
 split_offset = 580
 
-[node name="CodeEdit" type="CodeEdit" parent="Panel/MarginContainer/VSplitContainer"]
+[node name="TextEditor" parent="Panel/MarginContainer/VSplitContainer" instance=ExtResource("2_g1fe6")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "# comment
-scene 'name'
-wait 1.0
-sound 'sound name' -d 1.0 -o -b 2.0 -t 1.0 -c 2.5 -v 1.5 -p
-light spot rgba(0.2, 0.4, 0.8, 0.9) -o -d 1.0 -l left
-narate \"text\" -d 1.0 -t 1.0 -w
-actor 'name' 'texture'
-speak 'actor' \"dialog\" -d 1.0 -t 1.0 -w
-enter 'actor' down-center -dr below -t 1.0
-exit 'actor' up-right -dr right -t 1.0
-move 'actor' up-left -s sub-location
-animate 'actor' 'animation name' -t 1.0 -c 2.5"
-wrap_mode = 1
-indent_wrapped_lines = true
-scroll_past_end_of_file = true
-minimap_draw = true
-caret_blink = true
-highlight_all_occurrences = true
-highlight_current_line = true
-gutters_draw_breakpoints_gutter = true
-gutters_draw_line_numbers = true
-auto_brace_completion_highlight_matching = true
 
 [node name="Panel" type="Panel" parent="Panel/MarginContainer/VSplitContainer"]
 layout_mode = 2
@@ -74,13 +52,3 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[connection signal="breakpoint_toggled" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_breakpoint_toggled"]
-[connection signal="caret_changed" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_caret_changed"]
-[connection signal="code_completion_requested" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_code_completion_requested"]
-[connection signal="lines_edited_from" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_lines_edited_from"]
-[connection signal="symbol_hovered" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_symbol_hovered"]
-[connection signal="symbol_lookup" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_symbol_lookup"]
-[connection signal="symbol_validate" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_symbol_validate"]
-[connection signal="text_changed" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_text_changed"]
-[connection signal="text_set" from="Panel/MarginContainer/VSplitContainer/CodeEdit" to="." method="_on_code_edit_text_set"]
