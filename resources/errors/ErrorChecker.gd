@@ -7,6 +7,7 @@ enum Types {
 	ACTOR_NOT_RECOGNISED,
 	TEXTURE_NOT_RECOGNISED,
 	SOUND_NOT_RECOGNISED,
+	LIGHT_NOT_RECOGNISED,
 	ANIMATION_NOT_RECOGNISED,
 	LOCATION_NOT_RECOGNISED,
 	DIRECTION_NOT_RECOGNISED,
@@ -15,6 +16,8 @@ enum Types {
 	STRING_NOT_CLOSED,
 	STRING_EMPTY,
 	NEEDLESS_PARAMS,
+	FUNCTION_MISSING_PARENTHESES,
+	FUNCTION_MISSING_ARGS,
 }
 
 static var messages: Dictionary[Types, String] = {
@@ -23,6 +26,7 @@ static var messages: Dictionary[Types, String] = {
 	Types.ACTOR_NOT_RECOGNISED: "Cannot find actor '%s'.",
 	Types.TEXTURE_NOT_RECOGNISED: "Cannot find texture '%s'.",
 	Types.SOUND_NOT_RECOGNISED: "Cannot find sound '%s'.",
+	Types.LIGHT_NOT_RECOGNISED: "'%s' is not a light type.",
 	Types.ANIMATION_NOT_RECOGNISED: "'%s' is not an animation.",
 	Types.LOCATION_NOT_RECOGNISED: "'%s' is not a location.",
 	Types.DIRECTION_NOT_RECOGNISED: "'%s' is not a direction.",
@@ -30,7 +34,9 @@ static var messages: Dictionary[Types, String] = {
 	Types.STRING_NOT_FOUND: "A string using %s quotes should be here.",
 	Types.STRING_NOT_CLOSED: "String must be closed with a matching %s symbol.",
 	Types.STRING_EMPTY: "Strings cannot be empty.",
-	Types.NEEDLESS_PARAMS: "These params mean nothing and should be removed: %s"
+	Types.NEEDLESS_PARAMS: "These params mean nothing and should be removed: %s",
+	Types.FUNCTION_MISSING_PARENTHESES: "Functions must have opening and closing '()'.",
+	Types.FUNCTION_MISSING_ARGS: "This function requires %s params."
 }
 
 static var suggestions: Array[String] = [
@@ -179,7 +185,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								Vector2(param_index + param.length() + 1, line_number), 
 								get_message(Types.PARAM_NOT_RECOGNISED, [param, "sound"])
 							))
-						elif float_params.count(param):
+						elif float_params.count(param) > 0:
 							var value = line.substr(param_index).split(" ")[1]
 							if not value.is_valid_float():
 								errors.push_back(EditorError.new(
@@ -187,17 +193,82 @@ static func process(script: ScriptData) -> Array[EditorError]:
 									get_message(Types.INVALID_NUMBER, [value])
 								))
 			"light": # light 'type' *rgba(red,green,blue,alpha)* [-o] [-d *delay*] [-l *location*]
-				var type = line.split("'")[1]
-				var color = get_color(line)
-				var delay = get_optional_float("-d", args, 0.0)
-				var off = has_optional_bool("-o", args)
-				var location = get_optional_string("-l", args)
-				
-				#errors.push_back(EditorError.new(
-					#Vector2(
-						#get_column(line, args), line_number), 
-						#get_message( , args)
-				#))
+				if not line.contains("'"): # check for string
+					errors.push_back(EditorError.new(
+						Vector2(5, line_number), 
+						get_message(Types.STRING_NOT_FOUND, ["'single'"])
+					))
+				elif line.count("'") < 2: # check for string closing
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_NOT_CLOSED, ["'"])
+					))
+				elif line.split("'")[1].is_empty(): # check for string content
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_EMPTY, [])
+					))
+				elif not is_light(line.split("'")[1]): # check if light type exists
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.LIGHT_NOT_RECOGNISED, [line.split("'")[1]])
+					))
+				elif line.contains("spot") && not line.contains("-l"): # check spot for location
+					var location = get_optional_string("-l", args)
+					
+					if not is_location(location):
+						errors.push_back(EditorError.new(
+							Vector2(line.find("-l") + 3, line_number), 
+							get_message(Types.LOCATION_NOT_RECOGNISED, location)
+						))
+				elif line.contains("rgba"): # check the color
+					if not line.contains("(") || not line.contains(")"): # check parentheses
+						errors.push_back(EditorError.new(
+							Vector2(line.find("rgba") + 4, line_number), 
+							get_message(Types.FUNCTION_MISSING_PARENTHESES, [])
+						))
+					elif line.count(",") < 4: # check for param count
+						errors.push_back(EditorError.new(
+							Vector2(line.find("rgba") + 4, line_number), 
+							get_message(Types.FUNCTION_MISSING_ARGS, ["4"])
+						))
+					else: # ensure params are all floats
+						var color_params = line.split("(")[1].split(")")[0].split(",")
+						
+						for index in color_params.size(): 
+							if not color_params[index].is_valid_float():
+								if index == 0: # the first param comes after the '('
+									errors.push_back(EditorError.new(
+										Vector2(line.find("(") + 1, line_number), 
+										get_message(Types.INVALID_NUMBER, [color_params[index]])
+									))
+								else:
+									errors.push_back(EditorError.new(
+										Vector2(find_nth_char(line, ",", index), line_number), 
+										get_message(Types.INVALID_NUMBER, [color_params[index]])
+									))
+				else:
+					# check each optional param
+					var float_params: Array[String] = ["-d"]
+					var all_params: Array[String] = float_params.duplicate()
+					all_params.push_back("-o")
+					
+					var unknown_params: Array[String] = line.split("-")
+					for segment in unknown_params:
+						var param = "-%s" % segment.split(" ")[0]
+						var param_index = line.find(param)
+						if all_params.find(param) == -1:
+							errors.push_back(EditorError.new(
+								Vector2(param_index + param.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [param, "light"])
+							))
+						elif float_params.count(param) > 0:
+							var value = line.substr(param_index).split(" ")[1]
+							if not value.is_valid_float():
+								errors.push_back(EditorError.new(
+									Vector2(param_index + param.length() + 1, line_number), 
+									get_message(Types.INVALID_NUMBER, [value])
+								))
 			"narate": # narate "text" [-d *delay*] [-d *duration*]
 				var dialog = get_dialogue(line)
 				var delay = get_optional_float("-d", args, 0.0)
@@ -295,6 +366,17 @@ static func has_audio(filename: String) -> bool:
 	return sound != null
 
 
+static func is_light(type: String) -> bool:
+	return type.to_lower() == "spot" || type.to_lower() == "fresnel"
+
+
+static func is_location(location: String) -> bool:
+	for key: String in Stage.Location.keys():
+		if key.to_lower() == location.to_lower():
+			return true
+	return false
+
+
 static func get_dialogue(line: String) -> String:
 	var parts: PackedStringArray = line.split("\"")
 	
@@ -335,3 +417,12 @@ static func get_optional_string(keyword: String, args: Array[String]) -> String:
 		if args[i] == keyword:
 			return args[i + 1] as String
 	return ""
+
+
+static func find_nth_char(line: String, character: String, count: int) -> int:
+	var stepping_index: int = 0
+	while count > 0:
+		stepping_index = line.find(character, stepping_index) + 1
+		count -= 1
+	
+	return -1
