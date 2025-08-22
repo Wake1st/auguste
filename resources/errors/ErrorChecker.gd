@@ -18,6 +18,7 @@ enum Types {
 	NEEDLESS_PARAMS,
 	FUNCTION_MISSING_PARENTHESES,
 	FUNCTION_MISSING_ARGS,
+	MISSING_PARAM,
 }
 
 static var messages: Dictionary[Types, String] = {
@@ -36,7 +37,8 @@ static var messages: Dictionary[Types, String] = {
 	Types.STRING_EMPTY: "Strings cannot be empty.",
 	Types.NEEDLESS_PARAMS: "These params mean nothing and should be removed: %s",
 	Types.FUNCTION_MISSING_PARENTHESES: "Functions must have opening and closing '()'.",
-	Types.FUNCTION_MISSING_ARGS: "This function requires %s params."
+	Types.FUNCTION_MISSING_ARGS: "This function requires %s params.",
+	Types.MISSING_PARAM: "%s keyword expects the param [%s]."
 }
 
 static var suggestions: Array[String] = [
@@ -144,6 +146,11 @@ static func process(script: ScriptData) -> Array[EditorError]:
 			"wait": # wait *duration*
 				var duration = args[1]
 				
+				if args.size() < 2: # check for second arg
+					errors.push_back(EditorError.new(
+						Vector2(4, line_number), 
+						get_message(Types.MISSING_PARAM, ["wait", "duration"])
+					))
 				if not duration.is_valid_float():
 					errors.push_back(EditorError.new(
 						Vector2(5, line_number), 
@@ -269,40 +276,160 @@ static func process(script: ScriptData) -> Array[EditorError]:
 									Vector2(param_index + param.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value])
 								))
-			"narate": # narate "text" [-d *delay*] [-d *duration*]
-				var dialog = get_dialogue(line)
-				var delay = get_optional_float("-d", args, 0.0)
-				var duration = get_optional_float("-t", args, 1.0)
-				var wait = get_optional_bool("-w", args)
-				
-				#errors.push_back(EditorError.new(
-					#Vector2(
-						#get_column(line, args), line_number), 
-						#get_message( , args)
-				#))
+			"narate": # narate "text" [-d *delay*] [-d *duration*] [-w]
+				if not line.contains("\""): # check for string
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_NOT_FOUND, ["\"double\""])
+					))
+				elif line.count("\"") < 2: # check for string closing
+					errors.push_back(EditorError.new(
+						Vector2(7, line_number), 
+						get_message(Types.STRING_NOT_CLOSED, ["\""])
+					))
+				elif line.split("\"")[1].is_empty(): # check for string content
+					errors.push_back(EditorError.new(
+						Vector2(7, line_number), 
+						get_message(Types.STRING_EMPTY, [])
+					))
+				else:
+					# check each optional param
+					var float_params: Array[String] = ["-d", "-t"]
+					var all_params: Array[String] = float_params.duplicate()
+					all_params.push_back("-w")
+					
+					var unknown_params: Array[String] = line.split("-")
+					for segment in unknown_params:
+						var param = "-%s" % segment.split(" ")[0]
+						var param_index = line.find(param)
+						if all_params.find(param) == -1:
+							errors.push_back(EditorError.new(
+								Vector2(param_index + param.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [param, "narate"])
+							))
+						elif float_params.count(param) > 0:
+							var value = line.substr(param_index).split(" ")[1]
+							if not value.is_valid_float():
+								errors.push_back(EditorError.new(
+									Vector2(param_index + param.length() + 1, line_number), 
+									get_message(Types.INVALID_NUMBER, [value])
+								))
 			"speak": # speak 'actor' "text" [-t *dialog*] [-d *delay*] [-w]
-				var actor_name = line.split("'")[1]
-				var dialog = get_dialogue(line)
-				var delay = get_optional_float("-d", args, 0.0)
-				var duration = get_optional_float("-t", args, 1.0)
-				var wait = get_optional_bool("-w", args)
-				
-				#errors.push_back(EditorError.new(
-					#Vector2(
-						#get_column(line, args), line_number), 
-						#get_message( , args)
-				#))
-			"enter": # enter 'actor' *location* [-d *from*] [-t *duration*]
-				var actor_name = line.split("'")[1]
-				var location = args[2]
-				var direction = get_optional_string("-dr", args)
-				var duration = get_optional_float("-t", args, 1.0)
-				
-				#errors.push_back(EditorError.new(
-					#Vector2(
-						#get_column(line, args), line_number), 
-						#get_message( , args)
-				#))
+				if not line.contains("'"): # check for string
+					errors.push_back(EditorError.new(
+						Vector2(5, line_number), 
+						get_message(Types.STRING_NOT_FOUND, ["'single'"])
+					))
+				elif line.count("'") < 2: # check for string closing
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_NOT_CLOSED, ["'"])
+					))
+				elif line.split("'")[1].is_empty(): # check for string content
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_EMPTY, [])
+					))
+				elif not line.contains("\""): # check for string
+					errors.push_back(EditorError.new(
+						Vector2(find_nth_char(line, "'", 2), line_number), 
+						get_message(Types.STRING_NOT_FOUND, ["\"double\""])
+					))
+				elif line.count("\"") < 2: # check for string closing
+					errors.push_back(EditorError.new(
+						Vector2(line.find("\""), line_number), 
+						get_message(Types.STRING_NOT_CLOSED, ["\""])
+					))
+				elif line.split("\"")[1].is_empty(): # check for string content
+					errors.push_back(EditorError.new(
+						Vector2(line.find("\""), line_number), 
+						get_message(Types.STRING_EMPTY, [])
+					))
+				else:
+					# check each optional param
+					var float_params: Array[String] = ["-d", "-t"]
+					var all_params: Array[String] = float_params.duplicate()
+					all_params.push_back("-w")
+					
+					var unknown_params: Array[String] = line.split("-")
+					for segment in unknown_params:
+						var param = "-%s" % segment.split(" ")[0]
+						var param_index = line.find(param)
+						if all_params.find(param) == -1:
+							errors.push_back(EditorError.new(
+								Vector2(param_index + param.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [param, "narate"])
+							))
+						elif float_params.count(param) > 0:
+							var value = line.substr(param_index).split(" ")[1]
+							if not value.is_valid_float():
+								errors.push_back(EditorError.new(
+									Vector2(param_index + param.length() + 1, line_number), 
+									get_message(Types.INVALID_NUMBER, [value])
+								))
+			"enter": # enter 'actor' *location* [-dr *from*] [-t *duration*]
+				if not line.contains("'"): # check for string
+					errors.push_back(EditorError.new(
+						Vector2(5, line_number), 
+						get_message(Types.STRING_NOT_FOUND, ["'single'"])
+					))
+				elif line.count("'") < 2: # check for string closing
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_NOT_CLOSED, ["'"])
+					))
+				elif line.split("'")[1].is_empty(): # check for string content
+					errors.push_back(EditorError.new(
+						Vector2(6, line_number), 
+						get_message(Types.STRING_EMPTY, [])
+					))
+				elif args.size() < 3: # check for location param
+					errors.push_back(EditorError.new(
+						Vector2(find_nth_char(line, "'", 2), line_number), 
+						get_message(Types.MISSING_PARAM, ["location"])
+					))
+				elif not is_location(args[2]): # check location type
+					errors.push_back(EditorError.new(
+						Vector2(line.find(args[2]), line_number), 
+						get_message(Types.LOCATION_NOT_RECOGNISED, [args[2]])
+					))
+				else:
+					# check each optional param
+					var float_params: Array[String] = ["-t"]
+					var all_params: Array[String] = float_params.duplicate()
+					all_params.push_back("-dr")
+					
+					var unknown_params: Array[String] = line.split("-")
+					for segment in unknown_params:
+						var param = "-%s" % segment.split(" ")[0]
+						var param_index = line.find(param)
+						if all_params.find(param) == -1:
+							errors.push_back(EditorError.new(
+								Vector2(param_index + param.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [param, "narate"])
+							))
+						elif float_params.count(param) > 0:
+							var value = line.substr(param_index).split(" ")[1]
+							if not value.is_valid_float():
+								errors.push_back(EditorError.new(
+									Vector2(param_index + param.length() + 1, line_number), 
+									get_message(Types.INVALID_NUMBER, [value])
+								))
+					
+					# check location
+					if line.count("-dr"):
+						var direction_index = line.find("-dr")
+						var direction_args = line.substr(direction_index).split(" ")
+						if direction_args.size() < 2:
+							errors.push_back(EditorError.new(
+								Vector2(direction_index + 3, line_number), 
+								get_message(Types.MISSING_PARAM, ["direction"])
+							))
+						elif not is_direction(direction_args[1]):
+							errors.push_back(EditorError.new(
+								Vector2(direction_index + 4, line_number), 
+								get_message(Types.DIRECTION_NOT_RECOGNISED, [direction_args[1]])
+							))
 			"exit": # exit 'actor' *location* [-d *to*] [-t *duration*]
 				var actor_name = line.split("'")[1]
 				var location = args[2]
@@ -349,7 +476,7 @@ static func get_quoted_text(line: String, place: int) -> String:
 	return line.split("'")[place]
 
 
-static func has_actor(actors: Array[Actor], actor_name: String) -> bool:
+static func is_actor(actors: Array[Actor], actor_name: String) -> bool:
 	for actor in actors:
 		if actor.name == actor_name:
 			return true
@@ -373,6 +500,13 @@ static func is_light(type: String) -> bool:
 static func is_location(location: String) -> bool:
 	for key: String in Stage.Location.keys():
 		if key.to_lower() == location.to_lower():
+			return true
+	return false
+
+
+static func is_direction(direction: String) -> bool:
+	for key: String in Stage.Direction.keys():
+		if key.to_lower() == direction.to_lower():
 			return true
 	return false
 
