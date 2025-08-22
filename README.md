@@ -86,11 +86,10 @@ A Puppet Show Maker.
 	- required: `location` on stage to put the actor
 	- optional: `direction`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
 	- optional: the `duration` which the exit lasts (default is one second)
-- `move 'actor' *location* [-s *sub-location*]`
+- `move 'actor' *location*`
 	- description: moves an actor to the specified `location`
 	- required: the `actor` to command
 	- required: `location`, a specific place on screen
-	- optional: `sub-location`, relative to anything already there
 - `animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]`:
 	- description: animates the actor
 	- required: the `actor` to command

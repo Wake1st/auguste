@@ -19,7 +19,7 @@ actor 'name' 'texture'
 speak 'actor' \"dialog\" -d 1.0 -t 1.0 -w
 enter 'actor' down-center -dr below -t 1.0
 exit 'actor' up-right -dr right -t 1.0
-move 'actor' up-left -s sub-location
+move 'actor' up-left
 animate 'actor' 'animation name' -t 1.0 -c 2.5"
 wrap_mode = 1
 indent_wrapped_lines = true
