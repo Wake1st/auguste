@@ -2,14 +2,27 @@ class_name IDE
 extends Control
 
 
-const SCRIPT_ERROR_BUTTON = preload("res://ui/editor/script_error_button.tscn")
-
 @onready var text_editor: TextEditor = %TextEditor
-@onready var error_container: VBoxContainer = %VBoxContainer
+@onready var error_display: ErrorDisplay = %ErrorDisplay
 
 
-func create_error(e: EditorError) -> void:
-	var button: ScriptErrorButton = SCRIPT_ERROR_BUTTON.instantiate()
-	button.create(e)
-	button.selected.connect(text_editor.set_caret)
-	error_container.add_child(button)
+func _ready() -> void:
+	error_display.setup(text_editor.set_caret)
+
+
+func _input(event) -> void:
+	if event.is_action_pressed("save"):
+		# get all lines
+		var lines = text_editor.get_lines()
+		
+		# process lines, return errors
+		var errors: Array[EditorError] = ErrorChecker.process(
+			ScriptData.new("EMPTY", lines)
+		)
+		
+		# clears errors
+		error_display.clear_errors()
+		
+		# display error
+		for error in errors:
+			error_display.add_error(error)

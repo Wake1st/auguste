@@ -12,15 +12,15 @@ theme_override_font_sizes/font_size = 24
 text = "# comment
 scene 'name'
 wait 1.0
-sound 'sound name' -d 1.0 -o -b 2.0 -t 1.0 -c 2.5 -v 1.5 -p
-light spot rgba(0.2, 0.4, 0.8, 0.9) -o -d 1.0 -l left
+sound 'throat' -d 1.0 -o -b 2.0 -t 1.0 -c 2.5 -v 1.5 -p
+light 'spot' rgba(0.2, 0.4, 0.8, 0.9) -o -d 1.0 -l left
 narate \"text\" -d 1.0 -t 1.0 -w
 actor 'name' 'texture'
 speak 'actor' \"dialog\" -d 1.0 -t 1.0 -w
 enter 'actor' down-center -dr below -t 1.0
 exit 'actor' up-right -dr right -t 1.0
 move 'actor' up-left
-animate 'actor' 'animation name' -t 1.0 -c 2.5"
+animate 'actor' 'bounce' -t 1.0 -c 2.5"
 wrap_mode = 1
 indent_wrapped_lines = true
 scroll_past_end_of_file = true

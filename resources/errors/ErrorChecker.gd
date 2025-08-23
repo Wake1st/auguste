@@ -93,7 +93,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 						Vector2(6, line_number), 
 						get_message(Types.STRING_EMPTY, [])
 					))
-				elif line.split("'").size() > 2: # check for extra params
+				elif line.split("'").size() > 3 && not line.split("'")[2].is_empty(): # check for extra params
 					var post_end: int = line.find("'", 7) + 1
 					
 					errors.push_back(EditorError.new(
@@ -101,6 +101,8 @@ static func process(script: ScriptData) -> Array[EditorError]:
 						get_message(Types.NEEDLESS_PARAMS, [line.substr(post_end)])
 					))
 			"actor": # actor 'name' 'texture'
+				var single_quote_split: PackedStringArray = line.split("'")
+				
 				if not line.contains("'"): # check for string
 					errors.push_back(EditorError.new(
 						Vector2(5, line_number), 
@@ -111,7 +113,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 						Vector2(6, line_number), 
 						get_message(Types.STRING_NOT_CLOSED, ["'"])
 					))
-				elif line.split("'")[1].is_empty(): # check for string content
+				elif single_quote_split[1].is_empty(): # check for string content
 					errors.push_back(EditorError.new(
 						Vector2(6, line_number), 
 						get_message(Types.STRING_EMPTY, [])
@@ -126,18 +128,18 @@ static func process(script: ScriptData) -> Array[EditorError]:
 						Vector2(line.find("'", line.find("'", 7) + 1), line_number), 
 						get_message(Types.STRING_NOT_CLOSED, ["'"])
 					))
-				elif line.split("'")[3].is_empty(): # check for string content
+				elif single_quote_split[3].is_empty(): # check for string content
 					errors.push_back(EditorError.new(
 						Vector2(line.find("'", line.find("'", 7) + 1), line_number), 
 						get_message(Types.STRING_EMPTY, [])
 					))
-				elif has_texture(line.split("'")[3]): # check is texture exists
+				elif has_texture(single_quote_split[3]): # check is texture exists
 					errors.push_back(EditorError.new(
 						Vector2(line.find("'", line.find("'", 7) + 1), line_number), 
-						get_message(Types.TEXTURE_NOT_RECOGNISED, [line.split("'")[3]])
+						get_message(Types.TEXTURE_NOT_RECOGNISED, [single_quote_split[3]])
 					))
-				elif line.split("'").size() > 4: # check for extra params
-					var post_end: int = line.find("'", line.find("'", 7) + 1) + 1
+				elif single_quote_split.size() > 5 && not single_quote_split[4].is_empty(): # check for extra params
+					var post_end: int = find_nth_char(line, "'", 4) + 1
 					
 					errors.push_back(EditorError.new(
 						Vector2(post_end, line_number), 
@@ -183,16 +185,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var all_params: Array[String] = float_params.duplicate()
 					all_params.push_back("-o")
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "sound"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "sound"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -201,7 +204,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 			"light": # light 'type' *rgba(red,green,blue,alpha)* [-o] [-d *delay*] [-l *location*]
@@ -239,16 +242,16 @@ static func process(script: ScriptData) -> Array[EditorError]:
 							Vector2(line.find("rgba") + 4, line_number), 
 							get_message(Types.FUNCTION_MISSING_PARENTHESES, [])
 						))
-					elif line.count(",") < 4: # check for param count
+					elif line.count(",") < 3: # check for param count
 						errors.push_back(EditorError.new(
 							Vector2(line.find("rgba") + 4, line_number), 
 							get_message(Types.FUNCTION_MISSING_ARGS, ["4"])
 						))
 					else: # ensure params are all floats
-						var color_params = line.split("(")[1].split(")")[0].split(",")
+						var color_params: PackedStringArray = line.split("(")[1].split(")")[0].split(",")
 						
 						for index in color_params.size(): 
-							if not color_params[index].is_valid_float():
+							if not color_params[index].strip_edges().is_valid_float():
 								if index == 0: # the first param comes after the '('
 									errors.push_back(EditorError.new(
 										Vector2(line.find("(") + 1, line_number), 
@@ -265,16 +268,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var all_params: Array[String] = float_params.duplicate()
 					all_params.push_back("-o")
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "light"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "light"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -283,7 +287,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 			"narate": # narate "text" [-d *delay*] [-d *duration*] [-w]
@@ -308,16 +312,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var all_params: Array[String] = float_params.duplicate()
 					all_params.push_back("-w")
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "narate"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "narate"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -326,7 +331,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 			"speak": # speak 'actor' "text" [-t *dialog*] [-d *delay*] [-w]
@@ -366,16 +371,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var all_params: Array[String] = float_params.duplicate()
 					all_params.push_back("-w")
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "narate"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "narate"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -384,7 +390,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 			"enter": # enter 'actor' *location* [-dr *from*] [-t *duration*]
@@ -419,16 +425,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var all_params: Array[String] = float_params.duplicate()
 					all_params.push_back("-dr")
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "enter"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "enter"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -437,7 +444,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 					
@@ -487,16 +494,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var all_params: Array[String] = float_params.duplicate()
 					all_params.push_back("-dr")
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "exit"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "exit"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -505,7 +513,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 					
@@ -554,16 +562,17 @@ static func process(script: ScriptData) -> Array[EditorError]:
 					var float_params: Array[String] = ["-t"]
 					var all_params: Array[String] = float_params.duplicate()
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "exit"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "exit"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -572,7 +581,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 			"animate": # animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]
@@ -598,26 +607,27 @@ static func process(script: ScriptData) -> Array[EditorError]:
 						Vector2(find_nth_char(line, "'", 2), line_number), 
 						get_message(Types.MISSING_PARAM, ["animation"])
 					))
-				elif not is_animation(args[2]): # check animation type
+				elif not is_animation(animation): # check animation type
 					errors.push_back(EditorError.new(
-						Vector2(line.find(args[2]), line_number), 
-						get_message(Types.ANIMATION_NOT_RECOGNISED, [args[2]])
+						Vector2(line.find(animation), line_number), 
+						get_message(Types.ANIMATION_NOT_RECOGNISED, [animation])
 					))
 				else:
 					# check each optional param
 					var float_params: Array[String] = ["-t", "-c"]
 					var all_params: Array[String] = float_params.duplicate()
 					
-					var unknown_params: Array[String] = line.split("-")
-					for segment in unknown_params:
-						var param = "-%s" % segment.split(" ")[0]
-						var param_index = line.find(param)
-						if all_params.find(param) == -1:
+					for arg in args:
+						if not arg.contains(" -"): # skip non optional params
+							continue
+						
+						var param_index = line.find(arg)
+						if all_params.find(arg) == -1:
 							errors.push_back(EditorError.new(
-								Vector2(param_index + param.length() + 1, line_number), 
-								get_message(Types.PARAM_NOT_RECOGNISED, [param, "exit"])
+								Vector2(param_index + arg.length() + 1, line_number), 
+								get_message(Types.PARAM_NOT_RECOGNISED, [arg, "exit"])
 							))
-						elif float_params.count(param) > 0:
+						elif float_params.count(arg) > 0:
 							var value_params = line.substr(param_index).split(" ")
 							if value_params.size() < 2:
 								errors.push_back(EditorError.new(
@@ -626,7 +636,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 								))
 							elif not value_params[1].is_valid_float():
 								errors.push_back(EditorError.new(
-									Vector2(param_index + param.length() + 1, line_number), 
+									Vector2(param_index + arg.length() + 1, line_number), 
 									get_message(Types.INVALID_NUMBER, [value_params[1]])
 								))
 			_:
@@ -640,13 +650,11 @@ static func process(script: ScriptData) -> Array[EditorError]:
 
 
 static func has_texture(filename: String) -> bool:
-	var texture: Texture2D = Assets.textures[filename]
-	return texture != null
+	return Assets.textures.has(filename)
 
 
 static func has_audio(filename: String) -> bool:
-	var sound: AudioStream = Assets.streams[filename]
-	return sound != null
+	return Assets.streams.has(filename)
 
 
 static func is_light(type: String) -> bool:
@@ -655,7 +663,7 @@ static func is_light(type: String) -> bool:
 
 static func is_location(location: String) -> bool:
 	for key: String in Stage.Location.keys():
-		if key.to_lower() == location.to_lower():
+		if key == location.to_upper().replace("-","_"):
 			return true
 	return false
 
@@ -687,4 +695,4 @@ static func find_nth_char(line: String, character: String, count: int) -> int:
 		stepping_index = line.find(character, stepping_index) + 1
 		count -= 1
 	
-	return -1
+	return stepping_index

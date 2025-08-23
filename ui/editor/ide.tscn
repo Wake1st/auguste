@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdjy4c4mfpy1x"]
+[gd_scene load_steps=4 format=3 uid="uid://bdjy4c4mfpy1x"]
 
 [ext_resource type="Script" uid="uid://dxylfdl1be1qc" path="res://ui/editor/ide.gd" id="1_054e2"]
 [ext_resource type="PackedScene" uid="uid://d18odq5u418yc" path="res://ui/editor/text_editor.tscn" id="2_g1fe6"]
+[ext_resource type="PackedScene" uid="uid://dlc3hfiwlcea3" path="res://ui/editor/error_display.tscn" id="3_shmj5"]
 
 [node name="IDE" type="Control"]
 layout_mode = 3
@@ -44,11 +45,14 @@ layout_mode = 2
 [node name="Panel" type="Panel" parent="Panel/MarginContainer/VSplitContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VSplitContainer/Panel"]
-unique_name_in_owner = true
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VSplitContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ErrorDisplay" parent="Panel/MarginContainer/VSplitContainer/Panel/ScrollContainer" instance=ExtResource("3_shmj5")]
+unique_name_in_owner = true
+layout_mode = 2

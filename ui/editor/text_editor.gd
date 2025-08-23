@@ -11,26 +11,14 @@ const DOUBLE_QUOTE_COLOR: Color = Color("b7f707")
 const FUNC_COLOR: Color = Color("7f1fed")
 const KEYWORD_COLOR: Color = Color("f2740c")
 
-@onready var error_container: VBoxContainer = %VBoxContainer
-
 
 func set_caret(location: Vector2) -> void:
 	set_caret_line(location.y)
 	set_caret_column(location.x)
 
 
-func _input(event) -> void:
-	if event.is_action_pressed("save"):
-		# get all lines
-		var lines = text.split("\n")
-		
-		# process lines, return errors
-		var errors: Array[EditorError] = ErrorChecker.process(
-			ScriptData.new("EMPTY", lines)
-		)
-		
-		# display error
-		pass
+func get_lines() -> PackedStringArray:
+	return text.split("\n")
 
 
 func _ready() -> void:
