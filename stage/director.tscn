@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://csomm8stwxt2h"]
+
+[ext_resource type="Script" uid="uid://daorig4craa1h" path="res://stage/director.gd" id="1_nghl5"]
+[ext_resource type="PackedScene" uid="uid://cglbigfxn3ytu" path="res://stage/script_interpreter.tscn" id="2_osckv"]
+
+[node name="Director" type="Node"]
+script = ExtResource("1_nghl5")
+
+[node name="ScriptInterpreter" parent="." instance=ExtResource("2_osckv")]

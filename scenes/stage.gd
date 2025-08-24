@@ -36,13 +36,10 @@ enum Animations {
 }
 #endregion
 
-signal finished()
-
 const ACTOR_SCENE = preload("res://stage/actor.tscn")
 
 @export var spawn_point: Marker2D
 
-@onready var interpreter: ScriptInterpreter = $ScriptInterpreter
 @onready var sound_manager: SoundManager = $SoundManager
 @onready var location_manager: LocationManager = $LocationManager
 @onready var wait_timer: Timer = %WaitTimer
@@ -52,42 +49,15 @@ const ACTOR_SCENE = preload("res://stage/actor.tscn")
 @onready var delay_timers: Node = $DelayTimers
 @onready var actor_node: Node2D = $Actors
 
-var commands: Array[Command]
-var command_index: int = -1
+var finished_callable: Callable
 var actors: Dictionary[String, Actor]
 
 
-func run(script: ScriptData) -> void:
-	commands = interpreter.process(script)
-	_next_command()
+func setup(callable: Callable) -> void:
+	finished_callable = callable
 
 
-func _next_command() -> void:
-	# increment and check for end of command
-	command_index += 1
-	if command_index >= commands.size():
-		finished.emit()
-		return
-	
-	# process the new command
-	var command = commands[command_index]
-	
-	# delayed commands will be bound to a timer
-	if command.has_delay():
-		_delay_command(command)
-		_next_command()
-	else:
-		_run(command)
-
-
-func _ready() -> void:
-	sound_manager.setup(_on_command_finished)
-	location_manager.setup(_on_command_finished)
-	dialog_display.finished.connect(_on_command_finished)
-	title_display.finished.connect(_on_command_finished)
-
-
-func _run(command: Command) -> void:
+func run(command: Command) -> void:
 	if command is SceneCommand:
 		# display title card
 		title_display.display((command as SceneCommand).name)
@@ -96,13 +66,13 @@ func _run(command: Command) -> void:
 		var actor: Actor = ACTOR_SCENE.instantiate()
 		actor.name = (command as ActorCommand).name
 		actor.texture = (command as ActorCommand).texture
-		actor.finished.connect(_on_command_finished)
+		actor.finished.connect(finished_callable)
 		
 		actor_node.add_child(actor)
 		actor.position = spawn_point.position
 		actors.set(actor.name, actor)
 		
-		_on_command_finished()
+		finished_callable.call()
 		return	# ensure we end function after calling finished
 	elif command is SoundCommand:
 		# add sound to manager and play
@@ -121,6 +91,7 @@ func _run(command: Command) -> void:
 		dialog_display.show_dialog(actor, actor_command)
 	elif command is EnterCommand:
 		var actor_command = command as EnterCommand
+		print(actors)
 		var actor: Actor = actors[actor_command.name]
 		location_manager.enter_actor(actor, actor_command)
 	elif command is ExitCommand:
@@ -141,27 +112,29 @@ func _run(command: Command) -> void:
 		#dialog_display.show_naration((command as ErrorCommand).msg())
 
 
-func _delay_command(command: Command) -> void:
+func delay_command(command: Command) -> void:
 	var timer: Timer = Timer.new()
 	delay_timers.add_child(timer)
 	timer.one_shot = true
 	timer.timeout.connect(_on_delay_timer_finished.bind(timer, command))
 	timer.start(command.delay)
 
-func _force_wait(waitTime: float) -> void:
+
+func force_wait(waitTime: float) -> void:
 	var timer: Timer = Timer.new()
 	delay_timers.add_child(timer)
 	timer.one_shot = true
 	timer.start(waitTime)
 	await timer.timeout
 
-func _on_delay_timer_finished(timer: Timer, command: Command) -> void:
-	_run(command)
-	timer.queue_free()
 
-func _on_command_finished(wasDelayed: bool = false, waitTime: float = -1.0) -> void:
-	if waitTime > 0.0:
-		await _force_wait(waitTime)
-	
-	if not wasDelayed:
-		_next_command()
+func _ready() -> void:
+	sound_manager.setup(finished_callable)
+	location_manager.setup(finished_callable)
+	dialog_display.finished.connect(finished_callable)
+	title_display.finished.connect(finished_callable)
+
+
+func _on_delay_timer_finished(timer: Timer, command: Command) -> void:
+	run(command)
+	timer.queue_free()

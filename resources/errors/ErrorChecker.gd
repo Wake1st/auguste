@@ -133,7 +133,7 @@ static func process(script: ScriptData) -> Array[EditorError]:
 						Vector2(line.find("'", line.find("'", 7) + 1), line_number), 
 						get_message(Types.STRING_EMPTY, [])
 					))
-				elif has_texture(single_quote_split[3]): # check is texture exists
+				elif not has_texture(single_quote_split[3]): # check is texture exists
 					errors.push_back(EditorError.new(
 						Vector2(line.find("'", line.find("'", 7) + 1), line_number), 
 						get_message(Types.TEXTURE_NOT_RECOGNISED, [single_quote_split[3]])

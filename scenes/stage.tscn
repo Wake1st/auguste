@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cddwbo8nccka8"]
+[gd_scene load_steps=7 format=3 uid="uid://cddwbo8nccka8"]
 
 [ext_resource type="Texture2D" uid="uid://c8niqqa2brlwo" path="res://assets/images/icon.svg" id="1_gi7kc"]
 [ext_resource type="Script" uid="uid://bhab8ydc1oh2f" path="res://scenes/stage.gd" id="1_kewym"]
-[ext_resource type="PackedScene" uid="uid://cglbigfxn3ytu" path="res://stage/script_interpreter.tscn" id="2_6c5u0"]
 [ext_resource type="PackedScene" uid="uid://bvirb8vqkaep3" path="res://stage/sound_manager.tscn" id="3_vcsse"]
 [ext_resource type="PackedScene" uid="uid://brn4x4hc5qjv4" path="res://stage/location_manager.tscn" id="5_vcsse"]
 [ext_resource type="PackedScene" uid="uid://o8cx3efyethd" path="res://ui/components/dialog_display.tscn" id="6_2so7o"]
@@ -11,8 +10,6 @@
 [node name="Stage" type="Node2D" node_paths=PackedStringArray("spawn_point")]
 script = ExtResource("1_kewym")
 spawn_point = NodePath("SpawnPoint")
-
-[node name="ScriptInterpreter" parent="." instance=ExtResource("2_6c5u0")]
 
 [node name="SoundManager" parent="." instance=ExtResource("3_vcsse")]
 
@@ -57,7 +54,5 @@ unique_name_in_owner = true
 
 [node name="TitleDisplay" parent="CanvasLayer" instance=ExtResource("7_st0q7")]
 unique_name_in_owner = true
-
-[node name="Camera2D" type="Camera2D" parent="."]
 
 [connection signal="timeout" from="DelayTimers/WaitTimer" to="." method="_on_command_finished"]

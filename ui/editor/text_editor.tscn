@@ -8,19 +8,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 24
+theme_override_colors/background_color = Color(0.0981734, 0.0209407, 0.104311, 1)
+theme_override_font_sizes/font_size = 16
 text = "# comment
 scene 'name'
 wait 1.0
 sound 'throat' -d 1.0 -o -b 2.0 -t 1.0 -c 2.5 -v 1.5 -p
 light 'spot' rgba(0.2, 0.4, 0.8, 0.9) -o -d 1.0 -l left
 narate \"text\" -d 1.0 -t 1.0 -w
-actor 'name' 'texture'
+actor 'actor' 'image-551'
 speak 'actor' \"dialog\" -d 1.0 -t 1.0 -w
 enter 'actor' down-center -dr below -t 1.0
-exit 'actor' up-right -dr right -t 1.0
 move 'actor' up-left
-animate 'actor' 'bounce' -t 1.0 -c 2.5"
+animate 'actor' 'bounce' -t 1.0 -c 2.5
+exit 'actor' up-right -dr right -t 1.0"
 wrap_mode = 1
 indent_wrapped_lines = true
 scroll_past_end_of_file = true

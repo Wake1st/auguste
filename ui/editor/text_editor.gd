@@ -2,7 +2,9 @@ class_name TextEditor
 extends CodeEdit
 
 
-const ACTION_COLOR: Color = Color("f5274d")
+signal content_changed()
+
+const ACTION_COLOR: Color = Color("ff6c4f")
 const COMMENT_COLOR: Color = Color("8c8f9c")
 const FLAG_COLOR: Color = Color("91b5ff")
 const NUMBER_COLOR: Color = Color("f636e5")
@@ -22,9 +24,6 @@ func get_lines() -> PackedStringArray:
 
 
 func _ready() -> void:
-	_add_keywords()
-
-func _add_keywords() -> void:
 	var highlighter: CodeHighlighter = CodeHighlighter.new()
 	
 	# comments and strings
@@ -102,23 +101,8 @@ func _on_caret_changed():
 func _on_lines_edited_from(from_line, to_line):
 	pass # Replace with function body.
 
-func _on_text_changed():
-	pass # Replace with function body.
+func _on_text_changed() -> void:
+	content_changed.emit()
 
-func _on_text_set():
-	pass # Replace with function body.
-
-
-
-## comment
-#scene 'name'
-#wait *duration*
-#sound 'sound name' [-d *delay*] [-o || [-b *start time*] [-t *duration*] [-c *cycle*]] [-v *volume*] [-p]
-#light *type* *rgba(red,green,blue,alpha)* [-o] [-d *delay*] [-l *location*]
-#narate "text" [-d *delay*] [-t *duration*] [-w]
-#actor 'name' 'texture'
-#speak 'actor' "dialog" [-d *delay*] [-t *duration*] [-w]
-#enter 'actor' *location* [-dr *direction*] [-t *duration*]
-#exit 'actor' *location* [-dr *direction*] [-t *duration*]
-#move 'actor' *location* [-s *sub-location*]
-#animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]
+func _on_text_set() -> void:
+	content_changed.emit()

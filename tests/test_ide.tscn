@@ -3,14 +3,7 @@
 [ext_resource type="Script" uid="uid://jiw4pi1kau0c" path="res://tests/test_ide.gd" id="1_ktd11"]
 [ext_resource type="PackedScene" uid="uid://bdjy4c4mfpy1x" path="res://ui/editor/ide.tscn" id="2_o1qo1"]
 
-[node name="TestIde" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TestIde" type="Node"]
 script = ExtResource("1_ktd11")
 
 [node name="IDE" parent="." instance=ExtResource("2_o1qo1")]
-layout_mode = 1
