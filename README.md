@@ -11,26 +11,23 @@ A Puppet Show Maker.
 	- [x] audio
 	- [x] scripts
 	- [x] storing files and keeping in RAM
-- [ ] editor
-	- [x] importing
-	- [ ] exporting
-	- [ ] scripting
+- [x] editor
+	- [x] scripting
 		- [x] commands
-		- [ ] breakpoints
-		- [ ] step through
-- [ ] stage
-	- [ ] locations
-		- [x] lighting
-		- [x] passing actor
-		- [ ] sub-locations
-	- [ ] debug/follow the script
-- [ ] scripts
+		- [x] breakpoints
+		- [x] step through
+- [x] scripts
 	- [x] light
 	- [x] sound
 	- [x] wait
 	- [x] actor
 	- [x] scene
 	- [x] add comments
+- [x] stage
+	- [x] locations
+		- [x] lighting
+		- [x] passing actor
+	- [x] reset the scene
 - [ ] export
 	- [ ] scripts
 	- [ ] recording

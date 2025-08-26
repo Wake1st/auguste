@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c52dxdgoglm3"]
+
+[ext_resource type="Script" uid="uid://vhsrunfwl8dg" path="res://ui/editor/step_flag_column.gd" id="1_amyh2"]
+
+[node name="StepFlagColumn" type="VBoxContainer"]
+theme_override_constants/separation = 2
+script = ExtResource("1_amyh2")
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 3

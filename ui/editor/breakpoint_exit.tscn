@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c78g5twyddspe"]
+
+[ext_resource type="Script" uid="uid://cbe6w15iahnvi" path="res://ui/editor/breakpoint_exit.gd" id="1_2pfna"]
+
+[node name="BreakpointExit" type="Node"]
+script = ExtResource("1_2pfna")

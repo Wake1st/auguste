@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bdjy4c4mfpy1x"]
+[gd_scene load_steps=7 format=3 uid="uid://bdjy4c4mfpy1x"]
 
 [ext_resource type="Script" uid="uid://dxylfdl1be1qc" path="res://ui/editor/ide.gd" id="1_054e2"]
-[ext_resource type="PackedScene" uid="uid://csomm8stwxt2h" path="res://stage/director.tscn" id="2_6cg64"]
 [ext_resource type="PackedScene" uid="uid://cddwbo8nccka8" path="res://scenes/stage.tscn" id="2_7efc7"]
+[ext_resource type="PackedScene" uid="uid://pujgi6pxqpn5" path="res://ui/editor/debug_director.tscn" id="2_fk22t"]
 [ext_resource type="PackedScene" uid="uid://d18odq5u418yc" path="res://ui/editor/text_editor.tscn" id="2_g1fe6"]
 [ext_resource type="PackedScene" uid="uid://dlc3hfiwlcea3" path="res://ui/editor/error_display.tscn" id="3_shmj5"]
+[ext_resource type="PackedScene" uid="uid://c52dxdgoglm3" path="res://ui/editor/step_flag_column.tscn" id="4_fk22t"]
 
 [node name="IDE" type="Control"]
 layout_mode = 3
@@ -16,8 +17,10 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_054e2")
 
-[node name="Director" parent="." node_paths=PackedStringArray("stage") instance=ExtResource("2_6cg64")]
+[node name="DebugDirector" parent="." node_paths=PackedStringArray("flag_column", "text_editor", "stage") instance=ExtResource("2_fk22t")]
 unique_name_in_owner = true
+flag_column = NodePath("../Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer/HSplitContainer/StepFlagColumn")
+text_editor = NodePath("../Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer/HSplitContainer/TextEditor")
 stage = NodePath("../Panel/MarginContainer/HBoxContainer/SubViewportContainer/SubViewport/Stage")
 
 [node name="Panel" type="ColorRect" parent="."]
@@ -44,22 +47,21 @@ theme_override_constants/margin_bottom = 32
 [node name="HBoxContainer" type="HSplitContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 16
-split_offset = 340
+split_offset = 300
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Panel/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(940, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Panel/MarginContainer/HBoxContainer/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(1200, 836)
+size = Vector2i(1160, 836)
 render_target_update_mode = 4
 
 [node name="Stage" parent="Panel/MarginContainer/HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_7efc7")]
 unique_name_in_owner = true
-scale = Vector2(0.52, 0.52)
+scale = Vector2(0.64, 0.64)
 
 [node name="Camera2D" type="Camera2D" parent="Panel/MarginContainer/HBoxContainer/SubViewportContainer/SubViewport"]
 
@@ -71,23 +73,23 @@ theme_override_constants/separation = 16
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSpace"]
 layout_mode = 2
-theme_override_constants/separation = 48
+theme_override_constants/separation = 32
 alignment = 1
 
 [node name="BtnBuild" type="Button" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "BUILD"
+text = " BUILD "
 
 [node name="BtnDebug" type="Button" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "DEBUG"
+text = " DEBUG "
 
 [node name="BtnPlay" type="Button" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "PLAY"
+text = " PLAY "
 
 [node name="VSplitContainer" type="VSplitContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSpace"]
 custom_minimum_size = Vector2(0, 680)
@@ -95,7 +97,16 @@ layout_mode = 2
 size_flags_vertical = 3
 split_offset = 720
 
-[node name="TextEditor" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer" instance=ExtResource("2_g1fe6")]
+[node name="HSplitContainer" type="HSplitContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer"]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="StepFlagColumn" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer/HSplitContainer" instance=ExtResource("4_fk22t")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TextEditor" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer/HSplitContainer" instance=ExtResource("2_g1fe6")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -103,8 +114,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSpace/VSplitContainer/Panel"]
-layout_mode = 1
-anchors_preset = 15
+layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2

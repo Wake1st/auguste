@@ -13,6 +13,12 @@ var command_index: int = -1
 
 
 func run(script: ScriptData) -> void:
+	# clear stage
+	command_index = -1
+	commands.clear()
+	stage.reset()
+	
+	# run commands
 	commands = interpreter.process(script)
 	_next_command()
 

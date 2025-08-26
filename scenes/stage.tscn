@@ -54,5 +54,3 @@ unique_name_in_owner = true
 
 [node name="TitleDisplay" parent="CanvasLayer" instance=ExtResource("7_st0q7")]
 unique_name_in_owner = true
-
-[connection signal="timeout" from="DelayTimers/WaitTimer" to="." method="_on_command_finished"]

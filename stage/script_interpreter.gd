@@ -5,7 +5,7 @@ extends Node
 func process(script: ScriptData) -> Array[Command]:
 	var actors: Array[Actor]
 	var commands: Array[Command]
-	var line_number: int = 0
+	var line_number: int = 1
 	
 	var lines = script.lines
 	for line: String in script.lines:

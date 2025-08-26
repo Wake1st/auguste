@@ -2,10 +2,12 @@ class_name IDE
 extends Control
 
 
+@onready var director: DebugDirector = %DebugDirector
+
+@onready var step_flag_column: StepFlagColumn = %StepFlagColumn
 @onready var code_space: VBoxContainer = %CodeSpace
 @onready var text_editor: TextEditor = %TextEditor
 @onready var error_display: ErrorDisplay = %ErrorDisplay
-@onready var director = %Director
 
 var script_data: ScriptData
 var has_unsaved_changes: bool = true
@@ -35,14 +37,14 @@ func _handle_show_finished() -> void:
 	code_space.visible = true
 
 
-func _on_btn_build_pressed():
+func _on_btn_build_pressed() -> void:
 	# get all lines
 	var lines = text_editor.get_lines()
 	script_data = ScriptData.new("EMPTY", lines)
 	has_passed = _check_errors(script_data)
 
 
-func _on_btn_debug_pressed():
+func _on_btn_debug_pressed() -> void:
 	if has_unsaved_changes:
 		var lines = text_editor.get_lines()
 		script_data = ScriptData.new("EMPTY", lines)
@@ -50,10 +52,11 @@ func _on_btn_debug_pressed():
 	
 	if has_passed:
 		# run in debug mode
-		pass
+		step_flag_column.create_flags(text_editor.get_line_count())
+		director.run(script_data)
 
 
-func _on_btn_play_pressed():
+func _on_btn_play_pressed() -> void:
 	if has_unsaved_changes:
 		var lines = text_editor.get_lines()
 		script_data = ScriptData.new("EMPTY", lines)

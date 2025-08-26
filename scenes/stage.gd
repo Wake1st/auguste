@@ -36,6 +36,8 @@ enum Animations {
 }
 #endregion
 
+signal delay_complete(line_number: int)
+
 const ACTOR_SCENE = preload("res://stage/actor.tscn")
 
 @export var spawn_point: Marker2D
@@ -57,6 +59,12 @@ func setup(callable: Callable) -> void:
 	finished_callable = callable
 
 
+func reset() -> void:
+	for key in actors.keys():
+		actors[key].queue_free()
+	actors.clear()
+
+
 func run(command: Command) -> void:
 	if command is SceneCommand:
 		# display title card
@@ -73,7 +81,6 @@ func run(command: Command) -> void:
 		actors.set(actor.name, actor)
 		
 		finished_callable.call()
-		return	# ensure we end function after calling finished
 	elif command is SoundCommand:
 		# add sound to manager and play
 		sound_manager.process(command as SoundCommand)
@@ -117,6 +124,7 @@ func delay_command(command: Command) -> void:
 	delay_timers.add_child(timer)
 	timer.one_shot = true
 	timer.timeout.connect(_on_delay_timer_finished.bind(timer, command))
+	timer.add_to_group("temp_timer")
 	timer.start(command.delay)
 
 
@@ -125,6 +133,7 @@ func force_wait(waitTime: float) -> void:
 	delay_timers.add_child(timer)
 	timer.one_shot = true
 	timer.start(waitTime)
+	timer.add_to_group("temp_timer")
 	await timer.timeout
 
 
@@ -133,8 +142,10 @@ func _ready() -> void:
 	location_manager.setup(finished_callable)
 	dialog_display.finished.connect(finished_callable)
 	title_display.finished.connect(finished_callable)
+	wait_timer.timeout.connect(finished_callable)
 
 
 func _on_delay_timer_finished(timer: Timer, command: Command) -> void:
 	run(command)
+	delay_complete.emit(command.line_number)
 	timer.queue_free()
