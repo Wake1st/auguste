@@ -1,0 +1,179 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw0i45o6fgt6a"]
+
+[ext_resource type="Script" uid="uid://b3g21434eh106" path="res://ui/menus/settings_menu.gd" id="1_h6jc8"]
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_h6jc8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -376.0
+offset_top = -349.0
+offset_right = 376.0
+offset_bottom = 349.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -259.0
+offset_top = -304.0
+offset_right = 260.0
+offset_bottom = 294.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 84
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 72
+
+[node name="Main" type="Control" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Main"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.0
+offset_right = 62.0
+offset_bottom = 12.0
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 36
+text = "Main"
+horizontal_alignment = 1
+
+[node name="MainSlider" type="HSlider" parent="Panel/VBoxContainer/Main"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+max_value = 1.0
+step = 0.02
+value = 0.8
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="Music" type="Control" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Music"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.0
+offset_right = 69.0
+offset_bottom = 12.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Music"
+horizontal_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="Panel/VBoxContainer/Music"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 1.0
+step = 0.02
+value = 0.8
+
+[node name="HSeparator3" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="Sfx" type="Control" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Sfx"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.0
+offset_right = 52.0
+offset_bottom = 12.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "SFX"
+horizontal_alignment = 1
+
+[node name="SfxSlider" type="HSlider" parent="Panel/VBoxContainer/Sfx"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 1.0
+step = 0.02
+value = 0.8
+
+[node name="HSeparator4" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="BtnReturn" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "RETURN"
+
+[connection signal="drag_ended" from="Panel/VBoxContainer/Main/MainSlider" to="." method="_on_main_slider_drag_ended"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Main/MainSlider" to="." method="_on_main_slider_value_changed"]
+[connection signal="drag_ended" from="Panel/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_drag_ended"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="drag_ended" from="Panel/VBoxContainer/Sfx/SfxSlider" to="." method="_on_sfx_slider_drag_ended"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Sfx/SfxSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="pressed" from="Panel/VBoxContainer/BtnReturn" to="." method="_on_btn_return_pressed"]

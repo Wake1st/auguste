@@ -14,6 +14,10 @@ config/name="auguste"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://assets/images/icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://resources/default_bus_layout.tres"
+
 [display]
 
 window/size/viewport_width=1800
