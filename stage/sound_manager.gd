@@ -20,7 +20,7 @@ func process(command: SoundCommand) -> void:
 		)
 		if not stage_sounds.is_empty():
 			stage_sounds.front().stop()
-		completion_callable.call()
+		completion_callable.call(command.has_delay())
 	else:
 		var player: StageSound = STAGE_SOUND.instantiate()
 		

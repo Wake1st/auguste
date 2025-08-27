@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://d18odq5u418yc"]
+
+[ext_resource type="Script" uid="uid://ca6pqf5ea4ra4" path="res://ui/editor/text_editor.gd" id="1_3lpfl"]
+
+[node name="TextEditor" type="CodeEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/background_color = Color(0.0981734, 0.0209407, 0.104311, 1)
+theme_override_font_sizes/font_size = 16
+text = "# comment
+scene 'name'
+actor 'actor' 'image-551'
+wait 1.0
+sound 'throat' -d 1.0 -o -b 2.0 -t 1.0 -c 2.5 -v 1.5 -p
+light 'spot' rgba(0.2, 0.4, 0.8, 0.9) -o -d 1.0 -l left
+narate \"text\" -d 1.0 -t 1.0 -w
+speak 'actor' \"dialog\" -d 1.0 -t 1.0 -w
+enter 'actor' down-center -dr below -t 1.0
+move 'actor' up-left
+animate 'actor' 'bounce' -t 1.0 -c 2.5
+exit 'actor' up-right -dr right -t 1.0"
+wrap_mode = 1
+indent_wrapped_lines = true
+scroll_past_end_of_file = true
+minimap_draw = true
+caret_blink = true
+highlight_all_occurrences = true
+highlight_current_line = true
+gutters_draw_breakpoints_gutter = true
+gutters_draw_line_numbers = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+script = ExtResource("1_3lpfl")
+
+[connection signal="breakpoint_toggled" from="." to="." method="_on_breakpoint_toggled"]
+[connection signal="caret_changed" from="." to="." method="_on_caret_changed"]
+[connection signal="code_completion_requested" from="." to="." method="_on_code_completion_requested"]
+[connection signal="lines_edited_from" from="." to="." method="_on_lines_edited_from"]
+[connection signal="symbol_hovered" from="." to="." method="_on_symbol_hovered"]
+[connection signal="symbol_lookup" from="." to="." method="_on_symbol_lookup"]
+[connection signal="symbol_validate" from="." to="." method="_on_symbol_validate"]
+[connection signal="text_changed" from="." to="." method="_on_text_changed"]
+[connection signal="text_set" from="." to="." method="_on_text_set"]

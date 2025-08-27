@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbccuphd4rplh"]
+
+[ext_resource type="Texture2D" uid="uid://n3833atlo6n2" path="res://assets/images/light_base.png" id="1_5wdse"]
+[ext_resource type="Script" uid="uid://dkixtnh5lsu5u" path="res://ui/editor/step_flag.gd" id="2_1yg7w"]
+
+[node name="StepFlag" type="TextureRect"]
+custom_minimum_size = Vector2(25, 25)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_5wdse")
+expand_mode = 1
+script = ExtResource("2_1yg7w")

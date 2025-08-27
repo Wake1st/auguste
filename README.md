@@ -11,26 +11,23 @@ A Puppet Show Maker.
 	- [x] audio
 	- [x] scripts
 	- [x] storing files and keeping in RAM
-- [ ] editor
-	- [x] importing
-	- [ ] exporting
-	- [ ] scripting
+- [x] editor
+	- [x] scripting
 		- [x] commands
-		- [ ] breakpoints
-		- [ ] step through
-- [ ] stage
-	- [ ] locations
-		- [x] lighting
-		- [x] passing actor
-		- [ ] sub-locations
-	- [ ] debug/follow the script
-- [ ] scripts
+		- [x] breakpoints
+		- [x] step through
+- [x] scripts
 	- [x] light
 	- [x] sound
 	- [x] wait
 	- [x] actor
 	- [x] scene
 	- [x] add comments
+- [x] stage
+	- [x] locations
+		- [x] lighting
+		- [x] passing actor
+	- [x] reset the scene
 - [ ] export
 	- [ ] scripts
 	- [ ] recording
@@ -86,11 +83,10 @@ A Puppet Show Maker.
 	- required: `location` on stage to put the actor
 	- optional: `direction`, the direction to where the actor disappears (`below`, `above`, `right`, `left`) (default is `below`)
 	- optional: the `duration` which the exit lasts (default is one second)
-- `move 'actor' *location* [-s *sub-location*]`
+- `move 'actor' *location*`
 	- description: moves an actor to the specified `location`
 	- required: the `actor` to command
 	- required: `location`, a specific place on screen
-	- optional: `sub-location`, relative to anything already there
 - `animate 'actor' 'animation name' [-t *duration* || -c *cycle count*]`:
 	- description: animates the actor
 	- required: the `actor` to command
