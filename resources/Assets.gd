@@ -15,7 +15,7 @@ static func load_resources() -> void:
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir() && not file_name.contains(".import"):
-				_load_image(dir_path + "/" + file_name)
+				load_image(dir_path + "/" + file_name)
 			
 			file_name = dir.get_next()
 	
@@ -26,7 +26,7 @@ static func load_resources() -> void:
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir() && not file_name.contains(".import"):
-				_load_audio(dir_path + "/" + file_name)
+				load_audio(dir_path + "/" + file_name)
 			
 			file_name = dir.get_next()
 	
@@ -37,25 +37,25 @@ static func load_resources() -> void:
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir() && not file_name.contains(".import"):
-				_load_script(dir_path + "/" + file_name)
+				load_script(dir_path + "/" + file_name)
 			
 			file_name = dir.get_next()
 			
 
 
-static func _load_image(path: String) -> void:
+static func load_image(path: String) -> void:
 	var texture: Texture2D = load(path)
 	var file_name: String = path.get_file().split(".")[0]
 	Assets.textures.set(file_name, texture)
 
 
-static func _load_audio(path: String) -> void:
+static func load_audio(path: String) -> void:
 	var audio: AudioStream = load(path)
 	var file_name: String = path.get_file().split(".")[0]
 	Assets.streams.set(file_name, audio)
 
 
-static func _load_script(path: String) -> void:
+static func load_script(path: String) -> void:
 	# load data
 	var lines: PackedStringArray
 	var file = FileAccess.open(path, FileAccess.READ)

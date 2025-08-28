@@ -2,8 +2,11 @@ class_name IDE
 extends Control
 
 
+signal return_selected()
+
 @onready var director: DebugDirector = %DebugDirector
 
+@onready var script_selector: ScriptSelector = %ScriptSelector
 @onready var step_flag_column: StepFlagColumn = %StepFlagColumn
 @onready var code_space: VBoxContainer = %CodeSpace
 @onready var text_editor: TextEditor = %TextEditor
@@ -12,6 +15,14 @@ extends Control
 var script_data: ScriptData
 var has_unsaved_changes: bool = true
 var has_passed: bool
+
+
+func setup() -> void:
+	script_selector.setup(
+		_handle_return_selected,
+		_handle_create_selected,
+		_handle_script_selected
+	)
 
 
 func _ready() -> void:
@@ -27,6 +38,21 @@ func _input(event) -> void:
 		script_data = ScriptData.new("EMPTY", lines)
 		
 		_check_errors(script_data)
+
+
+func _handle_return_selected() -> void:
+	visible = false
+	return_selected.emit()
+
+
+func _handle_create_selected() -> void:
+	# TODO: create an actual file
+	text_editor.clear()
+
+
+func _handle_script_selected(script_name: String, _type: ImportListItem.ImportType) -> void:
+	var script: ScriptData = Assets.scripts[script_name]
+	text_editor.text = "\n".join(script.lines)
 
 
 func _handle_content_changed() -> void:

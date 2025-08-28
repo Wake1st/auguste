@@ -1,3 +1,21 @@
-[gd_scene format=3 uid="uid://1lx612gpahmq"]
+[gd_scene load_steps=6 format=3 uid="uid://1lx612gpahmq"]
+
+[ext_resource type="Script" uid="uid://cxoo3dtkxk4r1" path="res://scenes/main.gd" id="1_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cfbgjniypet5x" path="res://ui/menus/main_menu.tscn" id="2_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://d01wtpgiwk5qj" path="res://ui/menus/import_menu.tscn" id="3_tefeu"]
+[ext_resource type="PackedScene" uid="uid://cw0i45o6fgt6a" path="res://ui/menus/settings_menu.tscn" id="4_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://bdjy4c4mfpy1x" path="res://ui/editor/ide.tscn" id="5_tbgi4"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_jyhfs")
+
+[node name="MainMenu" parent="." instance=ExtResource("2_tbgi4")]
+
+[node name="ImportMenu" parent="." instance=ExtResource("3_tefeu")]
+visible = false
+
+[node name="SettingsMenu" parent="." instance=ExtResource("4_o6xl0")]
+visible = false
+
+[node name="IDE" parent="." instance=ExtResource("5_tbgi4")]
+visible = false

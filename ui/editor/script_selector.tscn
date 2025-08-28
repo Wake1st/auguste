@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnqgph3oj6i76"]
+
+[ext_resource type="Script" uid="uid://bhkc6w2pdn3hr" path="res://ui/editor/script_selector.gd" id="1_wt0fu"]
+
+[node name="ScriptSelector" type="VBoxContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+script = ExtResource("1_wt0fu")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="BtnReturn" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = " RETURN "
+
+[node name="BtnCreate" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = " NEW "
+
+[connection signal="pressed" from="HBoxContainer/BtnReturn" to="." method="_on_btn_return_pressed"]
+[connection signal="pressed" from="HBoxContainer/BtnCreate" to="." method="_on_btn_create_pressed"]

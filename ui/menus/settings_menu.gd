@@ -12,8 +12,6 @@ const SFX_BUS_NAME: String = "Sfx"
 @onready var music: HSlider = %MusicSlider
 @onready var sfx: HSlider = %SfxSlider
 
-@onready var animation: AnimationPlayer = $AnimationPlayer
-
 
 func setup() -> void:
 	# set initial values

@@ -2,23 +2,29 @@
 
 [ext_resource type="Script" uid="uid://ru0r253sm3vg" path="res://ui/components/import_list_item.gd" id="1_ew8hx"]
 
-[node name="ImportListItem" type="PanelContainer"]
-custom_minimum_size = Vector2(920, 48)
+[node name="ImportListItem" type="Button"]
+custom_minimum_size = Vector2(556, 46)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -460.0
-offset_top = -24.0
-offset_right = 460.0
-offset_bottom = 26.0
+offset_left = -278.0
+offset_top = -25.0
+offset_right = 278.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
 script = ExtResource("1_ew8hx")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -26,7 +32,7 @@ theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HSplitContainer" parent="MarginContainer"]
 layout_mode = 2
-split_offset = 740
+split_offset = 800
 
 [node name="LblName" type="Label" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -41,3 +47,5 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "TYPE"
 vertical_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
