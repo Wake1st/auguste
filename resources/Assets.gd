@@ -40,19 +40,18 @@ static func load_resources() -> void:
 				load_script(dir_path + "/" + file_name)
 			
 			file_name = dir.get_next()
-			
 
 
 static func load_image(path: String) -> void:
 	var texture: Texture2D = load(path)
 	var file_name: String = path.get_file().split(".")[0]
-	Assets.textures.set(file_name, texture)
+	textures.set(file_name, texture)
 
 
 static func load_audio(path: String) -> void:
 	var audio: AudioStream = load(path)
 	var file_name: String = path.get_file().split(".")[0]
-	Assets.streams.set(file_name, audio)
+	streams.set(file_name, audio)
 
 
 static func load_script(path: String) -> void:
@@ -67,4 +66,53 @@ static func load_script(path: String) -> void:
 	# store in RAM
 	var file_name = path.get_file().split(".")[0]
 	var script: ScriptData = ScriptData.new(file_name, lines.duplicate())
-	Assets.scripts.set(file_name, script)
+	scripts.set(file_name, script)
+
+
+static func save_script(script: ScriptData) -> void:
+	var path = "res://assets/scripts/%s.txt" % script.name
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	for line in script.lines: # store all lines into the file
+		file.store_pascal_string(line)
+	file.close()
+	
+	scripts[script.name] = script
+
+
+static func create_script(filename: String) -> void:
+	# ensure name is unique
+	var unique_file = create_unique_name(filename)
+	
+	# load data
+	var path = "res://assets/scripts/%s.txt" % unique_file
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.close()
+	
+	# store in RAM
+	var script: ScriptData = ScriptData.new(unique_file, [])
+	scripts.set(unique_file, script)
+
+
+static func delete_script(filename: String) -> void:
+	# remove from storage
+	scripts.erase(filename)
+	
+	# deletes the file
+	var dir = DirAccess.open("res://assets/scripts/")
+	dir.remove("%s.txt" % filename)
+
+
+static func has_script(filename: String) -> bool:
+	var dir = DirAccess.open("res://assets/scripts/")
+	return dir.file_exists("%s.txt" % filename)
+
+
+static func create_unique_name(name: String) -> String:
+	# ensure edited name is unique
+	var unique_name = name
+	var counter: int = 1
+	while has_script(unique_name):
+		unique_name = "%s(%s)" % [unique_name, counter]
+		counter += 1
+	
+	return unique_name

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdjy4c4mfpy1x"]
+[gd_scene load_steps=10 format=3 uid="uid://bdjy4c4mfpy1x"]
 
 [ext_resource type="Script" uid="uid://dxylfdl1be1qc" path="res://ui/editor/ide.gd" id="1_054e2"]
 [ext_resource type="PackedScene" uid="uid://cddwbo8nccka8" path="res://scenes/stage.tscn" id="2_7efc7"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dnqgph3oj6i76" path="res://ui/editor/script_selector.tscn" id="3_npho7"]
 [ext_resource type="PackedScene" uid="uid://dlc3hfiwlcea3" path="res://ui/editor/error_display.tscn" id="3_shmj5"]
 [ext_resource type="PackedScene" uid="uid://c52dxdgoglm3" path="res://ui/editor/step_flag_column.tscn" id="4_fk22t"]
+[ext_resource type="PackedScene" uid="uid://byf6nblvykcgc" path="res://ui/editor/new_script_window.tscn" id="8_xc3c7"]
+[ext_resource type="PackedScene" uid="uid://d1voosbdbncq4" path="res://ui/editor/script_deletion_confirmation.tscn" id="9_lco62"]
 
 [node name="IDE" type="Control"]
 layout_mode = 3
@@ -135,6 +137,12 @@ unique_name_in_owner = true
 scale = Vector2(0.64, 0.64)
 
 [node name="Camera2D" type="Camera2D" parent="Panel/MarginContainer/HBoxContainer/SubViewportContainer/SubViewport"]
+
+[node name="NewScriptWindow" parent="." instance=ExtResource("8_xc3c7")]
+visible = false
+
+[node name="ScriptDeletionConfirmation" parent="." instance=ExtResource("9_lco62")]
+visible = false
 
 [connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer/BtnBuild" to="." method="_on_btn_build_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer/BtnDebug" to="." method="_on_btn_debug_pressed"]

@@ -5,6 +5,8 @@ extends Control
 signal return_selected()
 
 @onready var director: DebugDirector = %DebugDirector
+@onready var new_script_window: NewScriptWindow = $NewScriptWindow
+@onready var deletion_confirmation: ScriptDeletionConfirmation = $ScriptDeletionConfirmation
 
 @onready var script_selector: ScriptSelector = %ScriptSelector
 @onready var step_flag_column: StepFlagColumn = %StepFlagColumn
@@ -19,40 +21,83 @@ var has_passed: bool
 
 func setup() -> void:
 	script_selector.setup(
+		_handle_script_selected,
 		_handle_return_selected,
 		_handle_create_selected,
-		_handle_script_selected
+		_handle_save_selected,
+		_handle_delete_selected
 	)
+	script_selector.refresh()
 
 
 func _ready() -> void:
 	error_display.setup(text_editor.set_caret)
 	text_editor.content_changed.connect(_handle_content_changed)
 	director.finished.connect(_handle_show_finished)
+	
+	new_script_window.close_requested.connect(_handle_close_requested)
+	new_script_window.script_created.connect(_handle_creation_confirmed)
+	
+	deletion_confirmation.close_requested.connect(_handle_close_requested)
+	deletion_confirmation.confirmed.connect(_handle_delete_confirmed)
 
 
 func _input(event) -> void:
 	if event.is_action_pressed("save"):
 		# get all lines
-		var lines = text_editor.get_lines()
-		script_data = ScriptData.new("EMPTY", lines)
+		script_data.lines = text_editor.get_lines()
 		
+		# save file
+		Assets.save_script(script_data)
+		
+		# return syntax errors
 		_check_errors(script_data)
 
 
+#region SelectionHandlers
 func _handle_return_selected() -> void:
 	visible = false
 	return_selected.emit()
 
 
 func _handle_create_selected() -> void:
-	# TODO: create an actual file
+	new_script_window.show()
+
+
+func _handle_creation_confirmed(filename: String) -> void:
+	# create an actual file and update local data
+	Assets.create_script(filename)
+	script_data = ScriptData.new(filename, [])
+	
+	# ui updates
+	script_selector.refresh()
 	text_editor.clear()
 
 
+func _handle_close_requested() -> void:
+	new_script_window.hide()
+	new_script_window.clear()
+	deletion_confirmation.hide()
+
+
+func _handle_save_selected() -> void:
+	script_data.lines = text_editor.get_lines()
+	Assets.save_script(script_data)
+
+
+func _handle_delete_selected() -> void:
+	deletion_confirmation.request(script_data.name)
+
+
+func _handle_delete_confirmed() -> void:
+	Assets.delete_script(script_data.name)
+	text_editor.clear()
+	script_selector.refresh()
+
+
 func _handle_script_selected(script_name: String, _type: ImportListItem.ImportType) -> void:
-	var script: ScriptData = Assets.scripts[script_name]
-	text_editor.text = "\n".join(script.lines)
+	script_data = Assets.scripts[script_name]
+	text_editor.text = "\n".join(script_data.lines)
 
 
 func _handle_content_changed() -> void:
@@ -61,19 +106,18 @@ func _handle_content_changed() -> void:
 
 func _handle_show_finished() -> void:
 	code_space.visible = true
+#endregion
 
-
+#region EditorHandlers
 func _on_btn_build_pressed() -> void:
 	# get all lines
-	var lines = text_editor.get_lines()
-	script_data = ScriptData.new("EMPTY", lines)
+	script_data.lines = text_editor.get_lines()
 	has_passed = _check_errors(script_data)
 
 
 func _on_btn_debug_pressed() -> void:
 	if has_unsaved_changes:
-		var lines = text_editor.get_lines()
-		script_data = ScriptData.new("EMPTY", lines)
+		script_data.lines = text_editor.get_lines()
 		has_passed = _check_errors(script_data)
 	
 	if has_passed:
@@ -84,8 +128,7 @@ func _on_btn_debug_pressed() -> void:
 
 func _on_btn_play_pressed() -> void:
 	if has_unsaved_changes:
-		var lines = text_editor.get_lines()
-		script_data = ScriptData.new("EMPTY", lines)
+		script_data.lines = text_editor.get_lines()
 		has_passed = _check_errors(script_data)
 	
 	if has_passed:
@@ -107,3 +150,4 @@ func _check_errors(data: ScriptData) -> bool:
 	
 	# return if any errors
 	return errors.is_empty()
+#endregion

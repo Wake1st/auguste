@@ -19,8 +19,11 @@ func set_caret(location: Vector2) -> void:
 	set_caret_column(location.x)
 
 
-func get_lines() -> PackedStringArray:
-	return text.split("\n")
+func get_lines() -> Array[String]:
+	var lines: Array[String]
+	for line in text.split("\n"):
+		lines.push_back(line)
+	return lines
 
 
 func _ready() -> void:

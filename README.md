@@ -1,6 +1,6 @@
 # Auguste
 
-A Puppet Show Maker.
+A puppet show maker.
 
 ## Planning
 

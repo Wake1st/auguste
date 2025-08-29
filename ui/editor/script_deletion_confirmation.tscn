@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1voosbdbncq4"]
+
+[ext_resource type="Script" uid="uid://bdk2pjm3yemar" path="res://ui/editor/script_deletion_confirmation.gd" id="1_qytx7"]
+
+[node name="ScriptDeletionConfirmation" type="Window"]
+title = "Script Deletion Confirmation"
+initial_position = 1
+size = Vector2i(480, 200)
+script = ExtResource("1_qytx7")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnCancel" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 27.0
+offset_top = -79.0
+offset_right = 199.0
+offset_bottom = -26.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = " CANCEL "
+
+[node name="BtnConfirm" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -202.0
+offset_top = -79.0
+offset_right = -30.0
+offset_bottom = -26.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = " CONFIRM "
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -212.0
+offset_top = -93.0
+offset_right = 212.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Permanently delete this script?"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -212.0
+offset_top = -41.0
+offset_right = 212.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScriptName" type="Label" parent="Control/Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -212.0
+offset_top = -20.0
+offset_right = 212.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "file_name"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="Control/BtnCancel" to="." method="_on_btn_cancel_pressed"]
+[connection signal="pressed" from="Control/BtnConfirm" to="." method="_on_btn_confirm_pressed"]

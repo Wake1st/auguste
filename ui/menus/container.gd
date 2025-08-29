@@ -34,5 +34,6 @@ func display_script(script: ScriptData) -> void:
 	
 	var display: TextEditor = TEXT_EDITOR.instantiate()
 	display.text = "\n".join(script.lines as PackedStringArray)
+	display.editable = false
 	add_child(display)
 	current_display = display
