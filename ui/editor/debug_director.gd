@@ -1,6 +1,7 @@
 class_name DebugDirector
 extends Director
 
+
 @export var flag_column: StepFlagColumn
 @export var text_editor: TextEditor
 
@@ -8,7 +9,7 @@ extends Director
 
 
 func _ready() -> void:
-	super._ready()
+	stage.setup(_handle_command_finished)
 	stage.delay_complete.connect(_handle_delay_complete)
 
 
@@ -39,3 +40,11 @@ func _next_command() -> void:
 
 func _handle_delay_complete(line_number: int) -> void:
 	flag_column.set_flag(line_number, StepFlag.Type.ON)
+
+
+func _handle_command_finished(wasDelayed: bool = false, waitTime: float = -1.0) -> void:
+	if waitTime > 0.0:
+		await stage.force_wait(waitTime)
+	
+	if not wasDelayed:
+		_next_command()

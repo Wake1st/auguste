@@ -12,7 +12,7 @@ theme_override_colors/background_color = Color(0.0981734, 0.0209407, 0.104311, 1
 theme_override_font_sizes/font_size = 16
 text = "# comment
 scene 'name'
-actor 'actor' 'image-551'
+actor 'actor' 'The_Fool'
 wait 1.0
 sound 'throat' -d 1.0 -o -b 2.0 -t 1.0 -c 2.5 -v 1.5 -p
 light 'spot' rgba(0.2, 0.4, 0.8, 0.9) -o -d 1.0 -l left

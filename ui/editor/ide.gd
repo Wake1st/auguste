@@ -4,7 +4,7 @@ extends Control
 
 signal return_selected()
 
-@onready var director: DebugDirector = %DebugDirector
+@onready var director: DebugDirector = $DebugDirector
 @onready var new_script_window: NewScriptWindow = $NewScriptWindow
 @onready var deletion_confirmation: ScriptDeletionConfirmation = $ScriptDeletionConfirmation
 
@@ -13,6 +13,8 @@ signal return_selected()
 @onready var code_space: VBoxContainer = %CodeSpace
 @onready var text_editor: TextEditor = %TextEditor
 @onready var error_display: ErrorDisplay = %ErrorDisplay
+@onready var sub_viewport_container: SubViewportContainer = %SubViewportContainer
+@onready var stage: Stage = %Stage
 
 var script_data: ScriptData
 var has_unsaved_changes: bool = true
@@ -106,34 +108,54 @@ func _handle_content_changed() -> void:
 
 func _handle_show_finished() -> void:
 	code_space.visible = true
+	script_selector.visible = true
+	sub_viewport_container.visible = false
 #endregion
 
 #region EditorHandlers
 func _on_btn_build_pressed() -> void:
+	if script_data == null:
+		script_data = ScriptData.new("DEMO", [])
+	
 	# get all lines
 	script_data.lines = text_editor.get_lines()
 	has_passed = _check_errors(script_data)
 
 
 func _on_btn_debug_pressed() -> void:
+	if script_data == null:
+		script_data = ScriptData.new("DEMO", [])
+	
 	if has_unsaved_changes:
 		script_data.lines = text_editor.get_lines()
 		has_passed = _check_errors(script_data)
 	
 	if has_passed:
+		# change UI
+		script_selector.visible = false
+		sub_viewport_container.visible = true
+		
 		# run in debug mode
 		step_flag_column.create_flags(text_editor.get_line_count())
 		director.run(script_data)
 
 
 func _on_btn_play_pressed() -> void:
+	if script_data == null:
+		script_data = ScriptData.new("DEMO", [])
+	
 	if has_unsaved_changes:
 		script_data.lines = text_editor.get_lines()
 		has_passed = _check_errors(script_data)
 	
 	if has_passed:
-		# run without editor tools
+		# change UI
+		script_selector.visible = false
 		code_space.visible = false
+		sub_viewport_container.visible = true
+		
+		# run without editor tools
+		step_flag_column.create_flags(text_editor.get_line_count())
 		director.run(script_data)
 
 

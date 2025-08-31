@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://o8cx3efyethd"]
 
-[ext_resource type="Texture2D" uid="uid://dd8ux6153348s" path="res://assets/images/image-551.png" id="1_7r83y"]
 [ext_resource type="Script" uid="uid://b8ib25qwllplt" path="res://ui/components/dialog_display.gd" id="1_ptu3p"]
+[ext_resource type="Texture2D" uid="uid://c8niqqa2brlwo" path="res://assets/images/icon.svg" id="2_ptu3p"]
 
 [sub_resource type="Animation" id="Animation_ag087"]
 length = 0.001
@@ -133,7 +133,7 @@ split_offset = 160
 [node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/HSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-texture = ExtResource("1_7r83y")
+texture = ExtResource("2_ptu3p")
 expand_mode = 1
 stretch_mode = 6
 

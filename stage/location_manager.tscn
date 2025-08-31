@@ -1,10 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://brn4x4hc5qjv4"]
+[gd_scene load_steps=4 format=3 uid="uid://brn4x4hc5qjv4"]
 
 [ext_resource type="Script" uid="uid://w48pneymyb3k" path="res://stage/location_manager.gd" id="1_6u7ts"]
 [ext_resource type="PackedScene" uid="uid://b5agh5bl2k7m" path="res://stage/location.tscn" id="1_vw450"]
+[ext_resource type="Texture2D" uid="uid://dh00utpxxwu3q" path="res://assets/images/Stage.png" id="2_n5275"]
 
 [node name="LocationManager" type="Node2D"]
 script = ExtResource("1_6u7ts")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 312)
+texture = ExtResource("2_n5275")
 
 [node name="LocationUpLeft" parent="." instance=ExtResource("1_vw450")]
 position = Vector2(-400, -60)

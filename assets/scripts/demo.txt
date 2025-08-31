@@ -1,8 +1,8 @@
 # setup the scene
 scene 'Act 1:1'
 
-actor 'Alice' 'image-551'
-actor 'Bob' 'image-551'
+actor 'Alice' 'The_Stoic'
+actor 'Bob' 'The_Fool'
 
 # get started
 light 'spot' rgba(0.9, 0, 0.5, 0.9) -l right 

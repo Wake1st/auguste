@@ -21,7 +21,6 @@ mouse_filter = 2
 script = ExtResource("1_054e2")
 
 [node name="DebugDirector" parent="." node_paths=PackedStringArray("flag_column", "text_editor", "stage") instance=ExtResource("2_fk22t")]
-unique_name_in_owner = true
 flag_column = NodePath("../Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/HSplitContainer/StepFlagColumn")
 text_editor = NodePath("../Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/HSplitContainer/TextEditor")
 stage = NodePath("../Panel/MarginContainer/HBoxContainer/SubViewportContainer/SubViewport/Stage")
@@ -50,7 +49,7 @@ theme_override_constants/margin_bottom = 32
 [node name="HBoxContainer" type="HSplitContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 16
-split_offset = -220
+split_offset = 580
 
 [node name="HSplitContainer" type="HSplitContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -122,6 +121,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Panel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3

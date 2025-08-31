@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://b46ld3jc3q4m1"]
 
 [ext_resource type="Script" uid="uid://pd2sadtolbvc" path="res://stage/actor.gd" id="1_gmtv5"]
-[ext_resource type="Texture2D" uid="uid://dd8ux6153348s" path="res://assets/images/image-551.png" id="1_iinu1"]
 [ext_resource type="Shader" uid="uid://djgafbrr7tdlp" path="res://stage/actor.gdshader" id="2_6o1fx"]
+[ext_resource type="Texture2D" uid="uid://c8niqqa2brlwo" path="res://assets/images/icon.svg" id="3_6o1fx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_adapa"]
 shader = ExtResource("2_6o1fx")
@@ -137,7 +137,7 @@ script = ExtResource("1_gmtv5")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_adapa")
 position = Vector2(0, -169)
-texture = ExtResource("1_iinu1")
+texture = ExtResource("3_6o1fx")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

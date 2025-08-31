@@ -1,4 +1,4 @@
-actor 'Alice' 'image-551'
+actor 'Alice' 'The_Fool'
 
 speak 'Alice' "Taaaaadaaaaaaaa..." -t 3.0
 enter 'Alice' right -dr below -t 3.0 

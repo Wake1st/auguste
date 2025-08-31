@@ -5,8 +5,6 @@ static var mainVolume: float
 static var musicVolume: float
 static var sfxVolume: float
 
-static var fileNames: Array[String]
-
 
 static func save_user_data() -> void:
 	var save_file = FileAccess.open("user://user.save", FileAccess.WRITE)
@@ -14,8 +12,6 @@ static func save_user_data() -> void:
 	save_file.store_float(mainVolume)
 	save_file.store_float(musicVolume)
 	save_file.store_float(sfxVolume)
-	
-	save_file.store_var(fileNames)
 
 
 static func load_user_data() -> void:
@@ -35,8 +31,6 @@ static func load_user_data() -> void:
 	mainVolume = save_file.get_float()
 	musicVolume = save_file.get_float()
 	sfxVolume = save_file.get_float()
-	
-	fileNames = save_file.get_var()
 
 
 static func _default_data() -> void:

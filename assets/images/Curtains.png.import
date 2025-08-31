@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dd8ux6153348s"
-path="res://.godot/imported/image-551.png-84e3729a1e5da4ddaf6a0f26f1eb6e1b.ctex"
+uid="uid://baw8wqf2rfp24"
+path="res://.godot/imported/Curtains.png-a2a5227b891b0798a710449753b3ef89.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/image-551.png"
-dest_files=["res://.godot/imported/image-551.png-84e3729a1e5da4ddaf6a0f26f1eb6e1b.ctex"]
+source_file="res://assets/images/Curtains.png"
+dest_files=["res://.godot/imported/Curtains.png-a2a5227b891b0798a710449753b3ef89.ctex"]
 
 [params]
 

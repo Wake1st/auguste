@@ -9,7 +9,10 @@ extends Node
 
 
 func _ready() -> void:
+	UserData.load_user_data()
 	Assets.load_resources()
+	
+	settings_menu.setup()
 	import_menu.setup()
 	ide.setup()
 	

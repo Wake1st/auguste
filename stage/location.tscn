@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b5agh5bl2k7m"]
 
-[ext_resource type="Texture2D" uid="uid://dd8ux6153348s" path="res://assets/images/image-551.png" id="1_80yxl"]
 [ext_resource type="Script" uid="uid://msn2q5ggewb1" path="res://stage/location.gd" id="1_mssa3"]
+[ext_resource type="Texture2D" uid="uid://c5oplrvbhp0ty" path="res://assets/images/light_go.png" id="2_mssa3"]
 
 [node name="Location" type="Marker2D"]
 script = ExtResource("1_mssa3")
@@ -15,5 +15,5 @@ color = Color(0.970238, 0.959011, 0.78156, 1)
 energy = 16.0
 range_z_min = 0
 range_z_max = 0
-texture = ExtResource("1_80yxl")
-texture_scale = 0.8
+texture = ExtResource("2_mssa3")
+texture_scale = 8.0
