@@ -21,8 +21,8 @@ mouse_filter = 2
 script = ExtResource("1_054e2")
 
 [node name="DebugDirector" parent="." node_paths=PackedStringArray("flag_column", "text_editor", "stage") instance=ExtResource("2_fk22t")]
-flag_column = NodePath("../Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/HSplitContainer/StepFlagColumn")
-text_editor = NodePath("../Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/HSplitContainer/TextEditor")
+flag_column = NodePath("../Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer/HSplitContainer/StepFlagColumn")
+text_editor = NodePath("../Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer/HSplitContainer/TextEditor")
 stage = NodePath("../Panel/MarginContainer/HBoxContainer/SubViewportContainer/SubViewport/Stage")
 
 [node name="Panel" type="ColorRect" parent="."]
@@ -51,70 +51,71 @@ layout_mode = 2
 theme_override_constants/separation = 16
 split_offset = 580
 
-[node name="HSplitContainer" type="HSplitContainer" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="CodeSplitContainer" type="HSplitContainer" parent="Panel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 split_offset = -400
 
-[node name="ScriptSelector" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer" instance=ExtResource("3_npho7")]
+[node name="ScriptSelector" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer" instance=ExtResource("3_npho7")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CodeSpace" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer"]
+[node name="CodeSpace" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace"]
 layout_mode = 2
 theme_override_constants/separation = 32
 alignment = 1
 
-[node name="BtnBuild" type="Button" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer"]
+[node name="BtnBuild" type="Button" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = " BUILD "
 
-[node name="BtnDebug" type="Button" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer"]
+[node name="BtnDebug" type="Button" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = " DEBUG "
 
-[node name="BtnPlay" type="Button" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer"]
+[node name="BtnPlay" type="Button" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = " PLAY "
 
-[node name="VSplitContainer" type="VSplitContainer" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace"]
+[node name="VSplitContainer" type="VSplitContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace"]
 custom_minimum_size = Vector2(0, 680)
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 720
 
-[node name="HSplitContainer" type="HSplitContainer" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer"]
 layout_mode = 2
 dragging_enabled = false
 dragger_visibility = 1
 
-[node name="StepFlagColumn" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/HSplitContainer" instance=ExtResource("4_fk22t")]
+[node name="StepFlagColumn" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer/HSplitContainer" instance=ExtResource("4_fk22t")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TextEditor" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/HSplitContainer" instance=ExtResource("2_g1fe6")]
+[node name="TextEditor" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer/HSplitContainer" instance=ExtResource("2_g1fe6")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer"]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/Panel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer/Panel"]
 layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ErrorDisplay" parent="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/VSplitContainer/Panel/ScrollContainer" instance=ExtResource("3_shmj5")]
+[node name="ErrorDisplay" parent="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/VSplitContainer/Panel/ScrollContainer" instance=ExtResource("3_shmj5")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -144,6 +145,6 @@ visible = false
 [node name="ScriptDeletionConfirmation" parent="." instance=ExtResource("9_lco62")]
 visible = false
 
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer/BtnBuild" to="." method="_on_btn_build_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer/BtnDebug" to="." method="_on_btn_debug_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/HSplitContainer/CodeSpace/HBoxContainer/BtnPlay" to="." method="_on_btn_play_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/HBoxContainer/BtnBuild" to="." method="_on_btn_build_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/HBoxContainer/BtnDebug" to="." method="_on_btn_debug_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/CodeSplitContainer/CodeSpace/HBoxContainer/BtnPlay" to="." method="_on_btn_play_pressed"]

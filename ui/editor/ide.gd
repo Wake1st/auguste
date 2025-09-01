@@ -10,11 +10,13 @@ signal return_selected()
 
 @onready var script_selector: ScriptSelector = %ScriptSelector
 @onready var step_flag_column: StepFlagColumn = %StepFlagColumn
-@onready var code_space: VBoxContainer = %CodeSpace
 @onready var text_editor: TextEditor = %TextEditor
 @onready var error_display: ErrorDisplay = %ErrorDisplay
-@onready var sub_viewport_container: SubViewportContainer = %SubViewportContainer
 @onready var stage: Stage = %Stage
+
+@onready var code_space: VBoxContainer = %CodeSpace
+@onready var sub_viewport_container: SubViewportContainer = %SubViewportContainer
+@onready var code_split_container: HSplitContainer = %CodeSplitContainer
 
 var script_data: ScriptData
 var has_unsaved_changes: bool = true
@@ -107,6 +109,7 @@ func _handle_content_changed() -> void:
 
 
 func _handle_show_finished() -> void:
+	code_split_container.visible = true
 	code_space.visible = true
 	script_selector.visible = true
 	sub_viewport_container.visible = false
@@ -150,8 +153,7 @@ func _on_btn_play_pressed() -> void:
 	
 	if has_passed:
 		# change UI
-		script_selector.visible = false
-		code_space.visible = false
+		code_split_container.visible = false
 		sub_viewport_container.visible = true
 		
 		# run without editor tools

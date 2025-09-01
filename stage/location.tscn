@@ -9,11 +9,11 @@ script = ExtResource("1_mssa3")
 [node name="ActorNode" type="Node2D" parent="."]
 
 [node name="SpotLight" type="PointLight2D" parent="."]
-position = Vector2(0, -100)
+position = Vector2(0, -169)
 enabled = false
 color = Color(0.970238, 0.959011, 0.78156, 1)
 energy = 16.0
 range_z_min = 0
 range_z_max = 0
 texture = ExtResource("2_mssa3")
-texture_scale = 8.0
+texture_scale = 14.0
